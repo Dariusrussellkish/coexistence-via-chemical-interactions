@@ -1,4 +1,4 @@
-# Coexistence-via-Chemical-Interactions: Language and Design Choices, Verification, and new Results
+# Coexistence-via-Chemical-Interactions: Language and Design Choices, Verification, and New Results
 
 **Authors:**
 
@@ -15,7 +15,11 @@
 
 ### Abstract
 
+------
+
 ### Introduction
+
+------
 
 Mathematical modeling of population dynamics is ubiquitous in the sciences. From their applications in the presently relevant field of epidemics to population genetics, chemical kinetics, economics, and systems biology, discrete time-based simulations are used to solve systems of differential equations with no analytical solution. Often these systems are highly dependent on their input parameters and stochastic processes, so multiple replicates of the simulation are used to provide more reliable statistics of the models than one iteration provides.
 
@@ -23,7 +27,7 @@ Discrete time-based simulations are however costly due to difficulties in parall
 
 Many of these simulation models are designed and written by scientists without a programming background, and thus suffer from inefficiencies surrounding memory allocation, inefficient re-writing of language-implemented algorithms, avoidance of language-specific features and parallel libraries. For example, many modern languages allow for complex array indexing and operations along its dimensions, which might be overlooked for their conceptually easier but bloated explicit implementations. Design for memory efficiency may be overlooked due to language-specifics and complications surrounding the underlying operations masked by high level syntax. Parallelization is often times overlooked due to its complicated nature at the language-level, especially surrounding Random Number Generators (RNGs). These language features are costly to learn for researchers focused on the conceptual design of these simulations and their results. Thus, many simulation projects that do not employ dedicated software engineers suffer from sub-optimal performance.
 
-We chose a simulation in the systems biology category from Professor Babak Momeni's lab at Boston College. Its mathematical derivation can be found in *Momeni et al., 2017* and its implementation in Matlab and characterization in *Niehaus et al., 2019,* though we will provide a summary of its background, design, and characteristics here.
+We chose a simulation in systems biology from Professor Babak Momeni's lab at Boston College. Its mathematical derivation can be found in *Momeni et al., 2017* and its implementation in Matlab and characterization in *Niehaus et al., 2019,* though we will provide a summary of its background, design, and characteristics here.
 
 Microbial communities naively consist of microbes, small single-celled organisms that can form colonies consisting of cells from the same organism clustered together. While they are widely depicted as isolated colonies on petri dishes, these microbes do no always exist isolated in nature. Communities of microbial species have been found and characterized, sometimes displaying functionality that is not present in its basal components. Understanding the dynamics of microbial communities is vital to harnessing their functionality.
 
@@ -37,10 +41,6 @@ The model can be represented as a dynamic graph with two classifications of Node
 
 **Figure 1:** An example graphical representation of a model. There are three species and two mediators. There are 3 production edges with corresponding ***𝛽*** values, and two consumption edges with corresponding ***𝛼*** and ***𝜌*** values. Edges are shown with direction to show the flow of mediator, though the actual network topology is undirected. 
 
-
-
-
-
 These communities can be modeled using relatively simple rules and parameters. In its most simple form, the model is driven by two differential equations:
 
 1. <img src="https://render.githubusercontent.com/render/math?math=\frac{dS_{i}}{dt} = [r_{i0} %2B \sum_{l}(\rho_{il}^{pos}\frac{C_{l}}{C_{l} %2B K_{il}} - \rho_{il}^{neg}\frac{C_{l}}{K_{il}})]S_{i}">
@@ -48,14 +48,79 @@ These communities can be modeled using relatively simple rules and parameters. I
 
 2. <img src="https://render.githubusercontent.com/render/math?math=\frac{dC_{l}}{dt} = \sum_{l}(\beta_{li}S_{i}-\alpha_{li}\frac{C_{l}}{C_{l} %2B K_{il}}S_{i})">
 
+where ***r0*** values are basal growth rates which are then modified by the growth rate kinetic components in the summations. In simplified terms, ***r0*** is the rate at which a species would grow without any outside influence. This base rate is modified both positively and negatively for promotion and inhibition respectively. 
 
+The full model takes into account dilutions and generations, claiming stability is often reached by 200 generations of growth. However, these rules are not represented in the basic equations. Once the total sum of all cells is above the dilution threshhold (experimentally, generally measured using optical density of solution), all cells are diluted proportionally back to an initial value. Species who posessed a greater fraction of total cells before dilution posess the same fraction after dilution. This is done to simulate real dilutions necessary to avoid extended periods of lag phase and cell death seen in experimental incubation without dilutions. Additionally, the formula <img src="https://render.githubusercontent.com/render/math?math=\log_{2}(\frac{dilTh}{nInitCells})"> is used to calculate the number of generations grown in one round of propogation, where ***dilTh*** is the dilution threshhold in number of cells, and ***nInitCells*** is the number of initial cells, in number of cells. An additional maximum time is imposed in the numerical implementation of 250 hours. If the dilution threshold is not reached by 250 hours, then it is automatically diluted and a new round of propogation is started. 
 
-The full model takes into account dilutions and generations, claiming stability is often reached by 200 generations of growth, however these are not represented in the basic equations. Once the total sum of all cells is above the dilution threshhold (in real life generally measured using optical density), all cells are diluted proportionally back to an initial value. Species who posessed a greater fraction of total cells before dilution posess the same fraction after dilution. This is done to simulate real dilutions necessary to avoid lag phase and cell death seen in experimental incubation. Additionally, the formula <img src="https://render.githubusercontent.com/render/math?math=\log_{2}(\frac{dilTh}{nInitCells})"> is used to calculate the number of generations grown in one round of propogation, where *dilTh* is the dilution threshhold in number of cells, and *nInitCells* is the number of initial cells, in number of cells. An additional maximum time is imposed in the numerical implementation of 250 hours. If the dilution threshold is not reached by 250 hours, then it is automatically diluted and a new round of propogation is started. 
+Though the model is easiest graphically described, it exists in code as a series of matrices. As there are multiple species and mediators, their interactions can be described in an intraction matrix. Concentrations of species and mediators can be defined in their respective vectors. Production and consumption an also be defined in respective matrices. The enabled *Niehaus et al.* to represent equations **1** and **2** in their linear algebraic forms, taking advantage of fast matrix math libraries implemented in many modern languages. 
 
+The simulation consists of two parts: a simulation function, taking as inputs the above matrices and other scalar parameters which then runs through ***nGenerations*** of time, returning the surviving species and their percent compositions; and a simulation harness which generates randomized matrices within certain paramters to be passed to the simulation function. One iteration of the harness serves as one replicate.
 
+### Results
 
+------
 
+##### Design of Original Code
 
+The simulation code was downloaded from the GitHub repository provided in *Niehaus et al., 2019*. It was developed in Matlab and each function was broken out into its own file. A list of functions and their English descriptions are provided below:
 
+* *(Boolean Array[n, m])* Binomial Network Configuration, (***n=nSpecies, m= nMediators,  p***)
+  * Generates a ***n*** x ***m*** boolean array used to mask interaction, production and consumption matrices. There is a probability ***p*** that any [i,j] cell becomes populated with a 1, and ***1-p*** that it is a 0. 
+* *(Float Array[n, m])* Interaction Matrix Generation, (***n=nSpecies, m=nMediator, ri0, fracPos***)
+  * Generates a ***n*** x ***m*** interaction matrix with values between 0 and ***ri0***, with ***1-fracPos*** interactions being negative. 
+* *(nExisting[i], compositions[i])* WellMixedSimulation, (*simulation parameters*, see appendix A)
+  * Runs a simulation as described above for 200 generations and returns a vector of species that coexist at the end of simulation along with their percent compositions. 
+* *Void* Simulation Harness, (***nSamples***, *harness parameters*, see appendix A) 
+  * Generates inputs for ***nSamples*** simulations and runs them, tracking results and input parameters in arrays for further analysis. The resultant simulation data is serialized on disk for archiving and later analysis.
 
-[^ksat]: This is perhaps the most challenging aspect of this model to understand for non-biologists. For the case of inhibition, the model uses the formula: <img src="https://render.githubusercontent.com/render/math?math=r(C_{inh}) = r_{0} - r_{inh}\frac{C_{inh}}{K_{inh}}">, where <img src="https://render.githubusercontent.com/render/math?math={K_{inh}}"> is the corresponding *k* value in ***K***. The amplitude of effect on growth rate is controlled by ***K*** for inhibition. For positive interactions, or facilitation, the model uses  <img src="https://render.githubusercontent.com/render/math?math=r(C_{fac}) = r_{0} %2B r_{fac}\frac{C_{fac}}{C_{fac} %2B K_{inh}}">, a form of the Monod equation. Here, *k* determines at what concentration of  C that <img src="https://render.githubusercontent.com/render/math?math=\frac{r_{fac}}{2}"> will be reached, and <img src="https://render.githubusercontent.com/render/math?math=r_{fac}"> is the saturated effect on the growth constant by the mediator. These equations are determined from experimental data studying growth curves. For more information see *Merchuk and Asenjo, 1995* and *Konak, 1974.* 
+##### Motivations for Shift in Language
+
+Although the paper was published in an open access journal, Matlab is not an open source language. Many institutions maintain Matlab licenses, however costs for commercial and non-academic associated individuals is inhibitory when viable open source languages exist. Matlab additionally is not community developed, thus features available in other languages that may be beneficial to expansions of the model may not be feasibly implemented in Matlab. 
+
+An immediate example is sampling the initial species distributions from a non-uniform distribution. A proposed distribution for this task is the Dirichlet distribution, as it can be used to solve a string-cutting problem. In the string cutting problem, we want to cut a string into "***K*** pieces with different lengths, where each piece had a designated average length, but allowing some variation in the relative sizes of the pieces".[^stringcutting] Such a distribution of solutions to this problem can be generated by the Dirichlet distribution. This problem is directly applicatble to initial distributions, where we have a set amount of initial cells which we want to assign to the species with average proportion while still allowing for variation. We can, for example, bias species one to on average start as 50% of the initial composition, or have average uniform starting compositions with intersample variations. In Python and Julia, this distribution is avaible in the Numpy and Distributions packages respectively, which are well defined and developed packages that have gone through extensive testing. In Matlab, the Dirichlet distribution is not included in its native distributions, and instead an untested solution exists as a snippet in an online blog post.[^matlabdrchrnd] The lack of this feature through a well-vetted library can make finding an implementation difficult for a novice programmer and erode confidence in its implementation, since a novice programmer might lack the knowledge to test the unknown implementation. 
+
+##### Choosing a New Target Language
+
+ We explored multiple languages used in the scientific community to discern a viable new target language to port the existing code into. Our criteria were ease of syntax, well optimized high level operations, and fast matrix math. We wished to maintain the performance and ease of use for non-programmers of Matlab but in an open source language. This excluded C, C++, and FORTRAN despite their performance. Additionally, these languages lack reliable features for easy parallelization. A study by Jules Kouatchou published in NASA's *Modeling Guru* resource compares performance of common scientific languages in various scientific tasks from the framework of a novice programmer. It is unclear how many replicates were performed to eliminate random noise in execution time, however results were generally clear enough to guide our decisions. The results thus are not representative of highly optimized code in the language, rather general code that can be expected of a non-programmer researcher. We are primarily interested in results of matrix operations, since this is the major operation in the model. A excerpt summary of results are provided below:
+
+* Array Copies
+
+  |      Language      | n=5000 | n=9000 |
+  | :----------------: | :----: | :----: |
+  |   Python + Numba   |  0.26  |  0.34  |
+  |       Julia        | 0.0907 | 0.2274 |
+  |       Matlab       | 0.2787 | 0.8437 |
+  |         R          | 19.750 | 63.820 |
+  | Fortan + ifort -O3 | 0.0680 | 0.2120 |
+
+* Matrix Multiplication[^pythonnumba]
+
+  |    Language    | n=5000 | n=9000 |
+  | :------------: | :----: | :----: |
+  | Python + Numba |  3.64  | 13.57  |
+  |     Julia      | 0.1494 | 0.3497 |
+  |     Matlab     | 0.9567 | 0.2943 |
+  |       R        | 0.920  | 0.951  |
+  | Fortan + DGEMM | 0.2120 | 0.3320 |
+
+From these results, we see that Matlab is a very efficient language for its ease of use, explaining its strong foothold in the scientific community. R consistenly performs poorly and was eliminated. Although Python with Numba compilation provides generally good performance while maintaining access to the general purpose programming features of Python, it is outperformed by the language Julia in matrix math tasks. Julia additionally has intrinsic profiling tools to easily improve code performance. A comparison of available libraries for Python and Julia showed that for the scope of this model, Julia contained equivalents of Python libraries that would commonly be used to improve non-math aspects of the model. 
+
+While Python is a massively popular open source language with broad scope, this model inherently does not need to take advantage of many features present in Python. To optimize use of the model from a user standpoint, we identify useful feautures: serialization of variables to archive data for later use; configuration of input parameters from outside files; and visualization packages in the target language. These features can be achieved through the Serialization or JLD modules, JSON, and PyPlot modules in Julia respectively. Additionally, Julia is supported with Jupyter notebooks, allowing for equivalent usage in data analysis as Python. PyPlot is a wrapper of Python's PyPlot module, allowing equivalent usage. As the necessary features are present in both languages, Julia's impressive performance in the ciritcal sections drove out decision. Julia's syntax is a mix of Python and Matlab style syntax and is easy to pick up coming from eaither language. 
+
+Julia additionally features directives for multi-processor parallelization that are easier to utilize than Python's multiprocessing when no inter-process communication is necessary. Where in Matlab a *parfor* loop may be utilized, an equivalent *@distributed for* directive may be used in Julia when iterations of the for loop are independent, as they are in the model harness. RNGs can safely be utilized on each process through an array of Mersenne Twister RNGs that are jumped forward 10<sup>20</sup> steps from each other. This is similar to a process used in NumPy to achieve the an array of independent RNGs. The safe parallelization with easy syntax further solidified the decision to use Julia. 
+
+##### Improvements to the Model Implementation
+
+As described above, the base structure of the model was kept the same, including its representation in matrices to achiever higher performance than abstract graphical representations. The harness was changed to allow passing of model parameters via configuration files. This prevents changes to hardcoded values in source code by users and instead facilitates interaction through safer configuration files. We have also updated the harness to use multi-processor parallelization and updated the RNG the appropriate parallel-safe method described above. Simulation variables are saved using JLD, which can then be reloaded into a key,value dictionary at a later time. We have included in the *figures* folder a Jupyter notebook showing the use of JLD and PyPlot modules to load a simulation output, analyze its results and generate complex figures. 
+
+The simulation code itself was majorly updated using guidance from the *@time* macro. Its direct port from Matlab showed that memory optimizations performed by Matlab were not performed by Julia, and calls to the simulation often involved upwards of 10 GB of memory allocations per call. This is indicative of repetitive creation of temporary variables to store intermediate results of complex expressions. It appears that Matlab breaks expressions into base components and allocates temporary variables outside of the loop with in-place operations to only allocate this memory once. Julia does not do this automatically, so manual breaking up expressions combined with creation of temporary variables outside of the loop and syntax hints for in-place operations were used to achieve similar performance. This did not change the expressions or logic used in the original implementation, in other words its high-level semantics, however it did change the syntax to match its low-level semtantcis to those of Matlab. 
+
+##### Verification of the Model
+
+To verify that the model performs equivalently to the Matlab variant, Figure 2b of *Niehaus et al., 2019* was chosen to be replicated. For this, simulation parameters provided in Appendix [B] 
+
+[^ksat]: This is perhaps the most challenging aspect of this model to understand for non-biologists as it relates to cell growth kinetics. For the case of inhibition, the model uses the formula: <img src="https://render.githubusercontent.com/render/math?math=r(C_{inh}) = r_{0} - r_{inh}\frac{C_{inh}}{K_{inh}}">, where <img src="https://render.githubusercontent.com/render/math?math={K_{inh}}"> is the corresponding *k* value in ***K***. The amplitude of effect on growth rate is controlled by ***K*** for inhibition. For positive interactions, or facilitation, the model uses  <img src="https://render.githubusercontent.com/render/math?math=r(C_{fac}) = r_{0} %2B r_{fac}\frac{C_{fac}}{C_{fac} %2B K_{inh}}">, a form of the Monod equation. Here, *k* determines at what concentration of C that <img src="https://render.githubusercontent.com/render/math?math=\frac{r_{fac}}{2}"> will be reached, and <img src="https://render.githubusercontent.com/render/math?math=r_{fac}"> is the saturated effect on the growth constant by the mediator. These equations are determined from experimental data studying growth curves. For more information see *Merchuk and Asenjo, 1995* and *Konak, 1974.* 
+
+[^stringcutting]: https://en.wikipedia.org/wiki/Dirichlet_distribution#String_cutting
+[^matlabdrchrnd]: https://cxwangyi.wordpress.com/2009/03/18/to-generate-random-numbers-from-a-dirichlet-distribution/
+[^pythonnumba]: It is mentioned that a loop is used for multiplication in the Python+Numba benchmark, which appears to no be optimized into very efficient BLAS or LAPACK calls, accounting for this poor performance. This, however, may be indicative that it is not easy to invoke calls to these underlying libraries from Numba as a novice programmer. Their existance may also not be known, and thus not searched for when unexpected poor performance in encountered. 
