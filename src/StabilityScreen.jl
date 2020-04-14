@@ -9,6 +9,7 @@ using SharedArrays
 using Distributed
 using Serialization
 using JLD
+using JSON
 @everywhere using Logging
 @everywhere include("DistInteractionStrengthMT_PB.jl")
 @everywhere include("NetworkConfig_Binomial.jl")
@@ -280,102 +281,93 @@ end
 rndseed0 = convert(Int32, trunc(time()))
 
 r = let m = MersenneTwister(rndseed0)
-    [m; accumulate(Future.randjump, fill(big(10)^20, nworkers() + 1), init = m)]
+    [m accumulate(Future.randjump, fill(big(10)^20, nworkers() + 1), init = m)]
 end
 
-nGen = 200
-nInitialCell = 1e4 # total initial cells
-dilTh = 1e10 # coculture dilution threshold
-nCellType = 20 # # of cell types in the initial pool
-nMediator = 15 # # of mediators
-kSatLevel = 1e4 # interaction strength saturation level of each population
-extTh = 0.1 # population extinction threshold
-ri0 = 0.2 # maximum interaction strength, 1/hr
-posIntRatio = 0.1 # fraction of interactions that are positive
-tau0 = 0 # in hours
-tauf = 250 # in hours
-dtau = 0.01 # in hours, cell growth update and uptake timescale
-at = 1 # avg. consumption values (fmole per cell) alpha_ij: population i, resource j
-bt = 0.1 # avg. production rates (fmole per cell per hour) beta_ij: population i, resource j
-qp = 0.7 # probability of production link per population
-qc = 0.7 # probability of influence link per population
+open(ARGS[1], "r") do io
+    params = JSON.parse(io)
 
-basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_qp_$(qp)_qc_$(qc)_seed_$(rndseed0)"
+    nSample = params["nSample"]
+    nGen = params["nGen"]
+    nInitialCell = params["nInitialCell"] # total initial cells
+    dilTh = params["dilTh"] # coculture dilution threshold
+    nCellType = params["nCellType"] # # of cell types in the initial pool
+    nMediator = params["nMediator"] # # of mediators
+    kSatLevel = params["kSatLevel"] # interaction strength saturation level of each population
+    extTh = params["extTh"] # population extinction threshold
+    ri0 = params["ri0"] # maximum interaction strength, 1/hr
+    posIntRatio = params["posIntRatio"] # fraction of interactions that are positive
+    tau0 = params["tau0"] # in hours
+    tauf = params["tauf"] # in hours
+    dtau = params["dtau"] # in hours, cell growth update and uptake timescale
+    at = params["at"] # avg. consumption values (fmole per cell) alpha_ij: population i, resource j
+    bt = params["bt"] # avg. production rates (fmole per cell per hour) beta_ij: population i, resource j
+    qp = params["qp"] # probability of production link per population
+    qc = params["qc"] # probability of influence link per population
 
-@time NE0D,
-CmpADT,
-CmpBDT,
-CmpEDT,
-r0T,
-SiT,
-AT,
-BT,
-rintAT,
-rintBT,
-rintET,
-V0DT,
-initCellRatioArray = main(
-    parse(Int64, ARGS[1]),
-    nGen,
-    nInitialCell,
-    dilTh,
-    nCellType,
-    nMediator,
-    kSatLevel,
-    extTh,
-    ri0,
-    posIntRatio,
-    tauf,
-    dtau,
-    at,
-    bt,
-    qp,
-    qc,
-    r,
-)
+    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_qp_$(qp)_qc_$(qc)_seed_$(rndseed0)"
 
-save(
-    "$(basename).jld",
-    "NE0D",
     NE0D,
-    "CmpADT",
     CmpADT,
-    "CmpBDT",
     CmpBDT,
-    "CmpEDT",
     CmpEDT,
-    "r0T",
     r0T,
-    "SiT",
     SiT,
-    "AT",
     AT,
-    "BT",
     BT,
-    "rintAT",
     rintAT,
-    "rintBT",
     rintBT,
-    "rintET",
     rintET,
-    "V0DT",
     V0DT,
-)
+    initCellRatioArray = main(
+        nSample,
+        nGen,
+        nInitialCell,
+        dilTh,
+        nCellType,
+        nMediator,
+        kSatLevel,
+        extTh,
+        ri0,
+        posIntRatio,
+        tauf,
+        dtau,
+        at,
+        bt,
+        qp,
+        qc,
+        r,
+    )
 
-println(maximum(NE0D))
+    save(
+        "$(basename).jld",
+        "NE0D",
+        NE0D,
+        "CmpADT",
+        CmpADT,
+        "CmpBDT",
+        CmpBDT,
+        "CmpEDT",
+        CmpEDT,
+        "r0T",
+        r0T,
+        "SiT",
+        SiT,
+        "AT",
+        AT,
+        "BT",
+        BT,
+        "rintAT",
+        rintAT,
+        "rintBT",
+        rintBT,
+        "rintET",
+        rintET,
+        "V0DT",
+        V0DT,
+        "params",
+        params,
+    )
 
-# serialize("$basename.save",
-# (
-# NE0D = NE0D,
-# CmpADT = CmpADT,
-# CmpBDT = CmpBDT,
-# CmpEDT = CmpEDT,
-# r0T = r0T,
-# SiT = SiT,
-# AT = AT,
-# BT = BT,
-# rintAT = rintAT,
-# rintBT = rintBT,
-# rintET = rintET,
-# V0DT = V0DT,
-# ))
+    println(maximum(NE0D))
+end
