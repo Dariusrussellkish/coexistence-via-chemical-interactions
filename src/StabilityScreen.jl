@@ -281,7 +281,7 @@ end
 rndseed0 = convert(Int32, trunc(time()))
 
 r = let m = MersenneTwister(rndseed0)
-    [m accumulate(Future.randjump, fill(big(10)^20, nworkers() + 1), init = m)]
+    [m; accumulate(Future.randjump, fill(big(10)^20, nworkers() + 1), init = m)]
 end
 
 open(ARGS[1], "r") do io

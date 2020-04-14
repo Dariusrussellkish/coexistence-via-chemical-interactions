@@ -33,6 +33,7 @@ function main(
     qp,
     qc,
     r,
+    coarseness,
 )
     GenPerRound = log(dilTh / nInitialCell) / log(2)
     nRound = round(nGen / GenPerRound) # number of rounds of propagation
@@ -288,10 +289,10 @@ end
 rndseed0 = convert(Int32, trunc(time()))
 
 r = let m = MersenneTwister(rndseed0)
-    [m accumulate(Future.randjump, fill(big(10)^20, nworkers() + 1), init = m)]
+    [m; accumulate(Future.randjump, fill(big(10)^20, nworkers() + 1), init = m)]
 end
 
-open(ARGS[1], 'r') do io
+open(ARGS[1], "r") do io
     params = JSON.parse(io)
 
     nSample = params["nSample"]
