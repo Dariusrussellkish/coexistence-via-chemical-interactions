@@ -4,12 +4,10 @@ The following manuscript was created using Typora and unfortunately does not con
 
 **Authors:**
 
-- Darius Russell Kish<sup>1,2</sup>*
+- Darius Russell Kish<sup>1,2</sup>
 - Yuezhen Chen<sup>1</sup>
 - Jessica Fong Ng<sup>1</sup>
 - Matthew Uy<sup>1</sup>
-
-(\*) *indicates corresponding author*
 
 (1) *Department of Computer Science, Boston College*
 
@@ -222,12 +220,6 @@ Implementation in Julia was written by D.R.K. Simulations and data analyses were
 **Corresponding Author**
 
 Correspondence to [Darius Russell Kish](mailto:russeldk@bc.edu). 
-
-------
-
-### Ethics Declaration
-
-The authors declare no conflicts of interest. 
 
 ------
 
