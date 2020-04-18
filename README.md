@@ -1,8 +1,10 @@
-# Coexistence-via-Chemical-Interactions: Language and Design Choices, Verification, and New Results
+The following manuscript was created using Typora and unfortunately does not conform to Github's rudimentary Markdown syntax. A PDF render is provided, however Markdown is not a typesetting language and its formatting can be less than ideal at times. It is recommended to view the following document either in Typora or equivalent Markdown viewer, or read the PDF. 
+
+# Coexistence-via-Chemical-Interactions: a Case Study in Language and Design Choices, Verification, and New Results
 
 **Authors:**
 
-- Darius Russell Kish<sup>1,2</sup>*, russeldk@bc.edu
+- Darius Russell Kish<sup>1,2</sup>*
 - Yuezhen Chen<sup>1</sup>
 - Jessica Fong Ng<sup>1</sup>
 - Matthew Uy<sup>1</sup>
@@ -16,6 +18,8 @@
 ### Abstract
 
 ------
+
+[TODO]
 
 ### Introduction
 
@@ -31,15 +35,15 @@ We chose a simulation in systems biology from Professor Babak Momeni's lab at Bo
 
 Microbial communities naively consist of microbes, small single-celled organisms that can form colonies consisting of cells from the same organism clustered together. While they are widely depicted as isolated colonies on petri dishes, these microbes do no always exist isolated in nature. Communities of microbial species have been found and characterized, sometimes displaying functionality that is not present in its basal components. Understanding the dynamics of microbial communities is vital to harnessing their functionality.
 
-At a very high level, the Well-Mixed model represents a completely homogenous community. All cells can access all mediators in the same concentrations. This is representative of cultures grown in liquid media, which are generally shaken during incubation to ensure constant mixing. This simplifies the model greatly to exclude spatial distribution of species and mediators, needing diffusion constants for both in addition to the inclusion of boundary conditions. Choosing a Well-Mixed approach allows this model to be represented and simulated simply.
+At a very high level, the Well-Mixed model represents a completely homogenous community. All cells can access all mediators in the same concentrations. This is representative of cultures grown in liquid media, which are generally shaken during incubation to ensure constant mixing. This simplifies the model greatly to exclude spatial distribution of species and mediators, needing diffusion constants for both in addition to the inclusion of boundary conditions. Choosing a Well-Mixed approach allows this model to be represented and simulated simply while maintaining relevance to real life scenarios. 
 
-The model can be represented as a dynamic graph with two classifications of Nodes, and two classifications of Edges. There are two node types, a species node and a mediator node. The species node has an attribute that tracks the number of cells of the species in the simulation, *S*. A mediator is some non-species component that can be produced or consumed by species. When a species consumes as mediator, it induces either a positive or negative effect on the fitness of the species. A mediator node has an attribute that tracks its concentration, *C*, and *K* corresponding to its saturation level[^ksat]. The two edge types thus represent consumption and production. The production edge has an attribute corresponding to the amount of mediator produced by that species per time, 𝛽. A consumption edge has two attributes, the consumption rate, 𝛼, and its fitness effect, 𝜌.
+The model can be represented as a graph with two classifications of Nodes, and two classifications of Edges. There are two node types, a species node and a mediator node. The species node has an attribute that tracks the number of cells of the species in the simulation, *S*. A mediator is some non-species component that can be produced or consumed by species. When a species consumes as mediator, it induces either a positive or negative effect on the fitness of the species. A mediator node has an attribute that tracks its concentration, *C*, and *K* corresponding to its saturation level[^ksat]. The two edge types thus represent consumption and production. The production edge has an attribute corresponding to the amount of mediator produced by that species per time, 𝛽. A consumption edge has two attributes, the consumption rate, 𝛼, and its fitness effect, 𝜌.
 
 
 
-![Figure1](/Users/darius/coexistence-via-chemical-interactions/figures/Figure1.svg)
+![Figure1](figures/Figure1.svg)
 
-**Figure 1:** An example graphical representation of a model. There are three species and two mediators. There are 3 production edges with corresponding ***𝛽*** values, and two consumption edges with corresponding ***𝛼*** and ***𝜌*** values. Edges are shown with direction to show the flow of mediator, though the actual network topology is undirected. 
+**Figure 1:** *An example graphical representation of a model. There are three species and two mediators. There are 3 production edges with corresponding **𝛽** values, and two consumption edges with corresponding **𝛼** and **𝜌** values. Edges are shown with direction to show the flow of mediator, though the actual network topology is undirected.* 
 
 These communities can be modeled using relatively simple rules and parameters. In its most simple form, the model is driven by two differential equations:
 
@@ -127,22 +131,120 @@ All results presented below were run on Boston College's Research Cluster using 
 
 To verify that the model performs equivalently to the Matlab variant, Figure 2b of *Niehaus et al., 2019* was chosen to be replicated. For this, simulation parameters provided in Appendix [B] nearly identical to those used in the original study were used. The proportions of number of species coexisting at the end of simulation were calculated for three interaction matrix parameters: 50/50 positive/negative interactions, 10/90 positive/negative interations, and 90/10 positive/negative interactions, corresponding to the ***fracPos*** variable in interaction matrix generation. 
 
-![nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277](/Users/darius/coexistence-via-chemical-interactions/figures/nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277.png)
+<img src="figures/nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277.png" alt="nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277"/>
 
-**Figure 2:** Richness is defined as the number of coexisting species at the end of the simulation. Mostly positive (90/10) interaction matrices showed greater frequency of coexistence (richness > 1) than 50/50 interactions, whose frequency of coexistence is greater than mostly negative (10/90) interactions. For non-trivial cases where lines overlap, integrating under the curve using a Left-Riemann sum will give definitive coexistence frequencies. 
+**Figure 2:** *Richness is defined as the number of coexisting species at the end of the simulation. Mostly positive (90/10) interaction matrices showed greater frequency of coexistence (richness > 1) than 50/50 interactions, whose frequency of coexistence is greater than mostly negative (10/90) interactions. For non-trivial cases where lines overlap, integrating under the curve using a Left-Riemann sum will give definitive coexistence frequencies.* 
 
 The result of this simulations (Figure 2) strongly agrees with the results presented in *Niehaus et al., 2019*. Both overall shape of the frequency graph and the order of interaction matrices with their relative frequencies matches previous results. From these data we were confident our model is equivalent in behavior to that developed by *Niehaus et al.* and we could proceed with new analyses. 
 
 ##### Screening Consumption and Production Network Parameters
 
-Facilitation and inhibition are driven by consumption edges in the model. When a species consumes a mediator, it has either a positive or negative effect on its growth rate, which is the deciding factor for species survival in the model. When a mediator is consumed, its concentration in solution is reduced until it is fully depleted. This is countered by production of consumers by Species, so the consumption and production of mediators is vital to dynamics that influence final composition. Production and consumption is driven by the underlying graph determining which species produce which mediators, and which consume which mediators. The simulation parameters for these two networks are ***qc*** and ***qm*** for probability of a consumer edge and probability of a producer edge respectively. This can be considered as binomial construction of edges with probability ***qc*** or ***qm*** between two colors of nodes, ensuring the resultant graph is bipartite.[^bipartite]
+Facilitation and inhibition are driven by consumption edges in the model. When a species consumes a mediator, it has either a positive or negative effect on its growth rate, which is the deciding factor for species survival in the model. When a mediator is consumed, its concentration in solution is reduced until it is fully depleted. This is countered by production of consumers by Species, so the consumption and production of mediators is vital to dynamics that influence final composition. Production and consumption is driven by the underlying graph determining which species produce which mediators, and which consume which mediators. The simulation parameters for these two networks are ***qc*** and ***qp*** for probability of a consumer edge and probability of a producer edge respectively. This can be considered as binomial construction of edges with probability ***qc*** or ***qp*** between two colors of nodes, ensuring the resultant graph is bipartite.[^bipartite]
 
-The values of ***qc*** and ***qm*** were theorized to be important to the final richness of the community. 
+**Optimal** *qp* **and ** *qc* **Values are Dependent on the Number of Mediators**
+
+The values of ***qc*** and ***qp*** were theorized to be important to the final richness of the community, as they have direct effects on growth rates of the species, and the presence of interaction edges. To gain a broad overview of their effects on richness, a screen of ***qc*** and ***qp*** ranging from 0 to 1 was conducted. Other simulation parameters similar to the stability screen used for validation. 
+
+![Fine_Mean_Heatmap_nC_20_nM_15](figures/Fine_Mean_Heatmap_nC_20_nM_15.png)
+
+**Figure 3:** *When the number of Mediators is 15, the three interaction matrix paradigms display different optimal values for network configuration. In the mostly negative (10/90 +/-) interaction case, optimal values for consumption (**qc**) are clustered between 0.9 and 1, and for production (**qp**) between 0.1 and 0.3, with the maximal richness value of approximately 1.8 species occurring when **qc**=1 and **qp**=0.15. In the 50/50 +/- case the cluster of optimal values has shifted, with consumption between 0.05 and 0.15, and production between 0.45 and 1, with the maximum richness value of approximately 3 species occurring when **qc**=0.1 and **qp**=[0.6, 1]. In the case of mostly positive (90/10 +/-) interactions, a cluster similar to the 50/50 case is seen, however the maximum richness value of approximate 5 species is found when **qc**=0.[0.1, 15] and **qp**=[0.45, 0.7]. Heatmaps of the standard deviation and median values are available in the supplementary information.*  
+
+A general trend across all cases is as the fraction of positive interactions increases, the mean richness increases across all ***qc*** and ***qp*** values (Figure 3). In the mostly negative case, the maximum achieved richness was under 2 species, where in the mostly positive case at least two thirds of all ***qc*** and ***qp*** values exhibited richness of 2 or larger. This suggests, as seen in Figure 2 as well, that richness is influenced by the fraction of positive to negative interactions regardless of the underlying consumption and production network.
+
+The optimal values noted in Figure 3 differed slightly than previous unpublished results from the Momeni Lab. It was noted that their prior results were based on a simulation using 10 mediators, whereas our initial screen used 15 mediators. To elucidate the effect of the number mediators on the optimal ***qc*** and ***qp*** values, the number of mediators was screened from 5 to 20 mediators. This screen reveals an interaction between the number of mediators present in the simulation and the underlying production and consumption networks (Figure 4). There are different optimal network values for different numbers of mediators. 
+
+![qp_qc_nMediator_screen](figures/qp_qc_nMediator_screen.gif)
+
+**Figure 4:** *Animated heat maps of probability of production edge (**qp**) and probability of consumption edge (**qc**) screens across changing number of mediators. Two general trends are noticed across all three interaction types. First, the drop-off of optimal values becomes steeper as the number of mediators is increased. This is seen as higher contrast between the yellow and blue (high and low) representations with increasingly fewer middle values. The second trend is a shift in the 50/50 +/- interaction cases from cluster around **qc**=0.2, **qp**=1 down and left to **qc**=[0.05, 0.1] **qp**=[0.5, 1]. In the 90/10 +/- case the range of optimal **qp** is narrowed to [0.4, 0.55]. For the mostly negative 10/90 +/- case, optimal **qc**=1 remained constant, though **qp** shifts from 0.3 to 0.1.* 
+
+Biologically, there is not a clear explanation for these results. Since the simulation trials are independent of each other, a wide variety of interaction values and topologies are tested. Changing the number of mediators available likely has complex but systematic affects on the availability of interactions that influence growth rate. Communities likely assemble in order to maximize their positive interactions while minimizing negative interactions between species, and the shifts seen suggest the number of mediators has an affect on this balance. The number of mediators in the simulation affects the ideal network topologies for production, consumption, and interaction through an unknown mechanism. 
+
+**Optimal** *qp* **and ** *qc* **Values are Different for Competitive and Cooperative Communities**
+
+As suggested above, coexisting communities are theorized to maximize their positive interactions while minimizing negative interactions. The percentage of positive to negative interactions seen *overall* in the simulation is dictated by the ***nFracPos*** variable. In Figures 3 and 4, values of 0.1, 0.5, and 0.9 were tested, however their results suggest significant movements in the region of ***nFracPos***=[0, 0.5]. Values in the range of 0 to 1 in steps of 0.5 were screened to elucidate these movements. 
+
+![qp_qc_fracPos_screen_normed](figures/qp_qc_fracPos_screen_normed.gif)
+
+
+
+![qp_qc_fracPos_screen_linear](figures/qp_qc_fracPos_screen_linear.gif)
+
+**Figure 5:** *Animated heat maps of probability of production edge (**qp**) and probability of consumption edge (**qc**) screens across changing fraction of positive interaction in the interaction matrix. As shown in Figure 3, the mostly negative case (10/90 +/-) exhibited different clustering than the 50/50 and mostly positive case (90/10 +/-). This screen across the fraction of positive interactions reveals the shift in optimal **qp** and **qc** values for different community paradigms. In the top image, the heat map is normalized at every frame, whereas in the second image the scale is kept constant.* 
+
+In the normalized heat maps a clear shift from the high consumption and low production cluster in mostly negative interactions to the low consumption and median to high production cluster in ***nFracPos*** >= 0.3 can be seen. This is however not present in the constant scale heat maps, and instead an emergence of the low consumption and median to high production cluster from across the board low richness is seen. 
+
+In the normalized heat map when ***nFracPos*** = 0.3, the maximum richness value is slightly above 2, however it is found in approximately the same location on the optimal ***qp, qc*** cluster as increasing ***nFracPos*** values. When ***nFracPos*** = 1, the maximum richness value is nearly 6, suggesting the optimal ***qp, qc*** values do not change significantly above ***nFracPos*** = 0.3, but ***nFracPos*** increasingly boosts the richness seen at these optimal values network values. 
+
+The normalized heat maps are also useful for gaining insight into the balance of the two clusters across ***nFracPos*** values. Communities can be thought of in two modalities: competitive and cooperative. In a competitive community, species have mostly negative effects on each other's fitness, whereas a positive community has mostly positive effects on fitness. When ***nFracPos*** is low, it represents competitive communities as there are mostly negative interactions occurring. In these cases, the heat maps suggest that high consumption and low production values are optimal. For high ***nFracPos*** values, it appears low consumption and a wider range of production values from 0.5 to 1 are optimal. As seen above, the data suggest a cutoff of 30% positive interactions for communities to shift from competitive network topology to cooperative network topology. In other words, cooperative communities begin to form when there are at least 30% positive interactions. The differing but sustained regions of optimal network topology between modalities suggest a fundamental difference between the mechanisms that cooperative and competitive communities form stability. 
+
+### Discussion
+
+------
+
+### Methods
+
+------
+
+
+
+### Data Availability
+
+------
+
+All data are available upon request. All JLD files were generated with Julia version 1.4.0 (2020-03-21) with JLD version 0.9.2. It cannot be guaranteed that newer or older releases of either Julia or JLD will be compatible with these save files. If major changes to the availability of Julia v1.4.0 or JLD v0.9.2 become known, we will do our best to migrate the save files to a different, more available format. 
+
+### Code Availability
+
+------
+
+### Acknowledgements
+
+The original mathematical model was conceived by Wenying Shou and Babak Momeni and implemented in Matlab by Minghao Liu and B.M. 
+
+------
+
+### Author Information
+
+**Affiliations**
+
+*Department of Computer Science, Boston College, Chestnut Hill, MA, 02467*, USA
+
+Darius Russell Kish, Yuezhen Chen, Jessica Fong Ng, Matthew Uy
+
+*Department of Biology, Boston College, Chestnut Hill, MA, 02467*, USA
+
+Darius Russell Kish
+
+**Contributions**
+
+Implementation in Julia was written by D.R.K. Simulations and data analyses were conceived by D.R.K. and Babak Momeni, and run by D.R.K. D.R.K. wrote the manuscript and [TODO]
+
+**Corresponding Author**
+
+Correspondence to [Darius Russell Kish](mailto:russeldk@bc.edu). 
+
+------
+
+### Ethics Declaration
+
+The authors declare no conflicts of interest. 
+
+------
+
+### Appendices
+
+------
+
+### Supplementary Information
+
+------
+
+### References
 
 [^ksat]: This is perhaps the most challenging aspect of this model to understand for non-biologists as it relates to cell growth kinetics. For the case of inhibition, the model uses the formula: <img src="https://render.githubusercontent.com/render/math?math=r(C_{inh}) = r_{0} - r_{inh}\frac{C_{inh}}{K_{inh}}">, where <img src="https://render.githubusercontent.com/render/math?math={K_{inh}}"> is the corresponding *k* value in ***K***. The amplitude of effect on growth rate is controlled by ***K*** for inhibition. For positive interactions, or facilitation, the model uses  <img src="https://render.githubusercontent.com/render/math?math=r(C_{fac}) = r_{0} %2B r_{fac}\frac{C_{fac}}{C_{fac} %2B K_{inh}}">, a form of the Monod equation. Here, *k* determines at what concentration of C that <img src="https://render.githubusercontent.com/render/math?math=\frac{r_{fac}}{2}"> will be reached, and <img src="https://render.githubusercontent.com/render/math?math=r_{fac}"> is the saturated effect on the growth constant by the mediator. These equations are determined from experimental data studying growth curves. For more information see *Merchuk and Asenjo, 1995* and *Konak, 1974.* 
 
 [^stringcutting]: https://en.wikipedia.org/wiki/Dirichlet_distribution#String_cutting
 [^matlabdrchrnd]: https://cxwangyi.wordpress.com/2009/03/18/to-generate-random-numbers-from-a-dirichlet-distribution/
-[^pythonnumba]: It is mentioned that a loop is used for multiplication in the Python+Numba benchmark, which appears to no be optimized into very efficient BLAS or LAPACK calls, accounting for this poor performance. This, however, may be indicative that it is not easy to invoke calls to these underlying libraries from Numba as a novice programmer. Their existance may also not be known, and thus not searched for when unexpected poor performance in encountered. 
+[^pythonnumba]: It is mentioned that a loop is used for multiplication in the Python+Numba benchmark, which appears not to be optimized into very efficient BLAS or LAPACK calls, accounting for this poor performance. This, however, may be indicative that it is not easy to invoke calls to these underlying libraries from Numba as a novice programmer. Their existance may also not be known, and thus not searched for when unexpected poor performance in encountered. 
 [^sync]: The *@sync* macro further abstracts Julia's *Distributed* design from the user by waiting for all iterations of the for loop to complete before moving on. In our case we care that the full loop is finished before serializing the results to disk. Without this there is a possibility that the results are incomplete in to the User. It has no substantial penalty on speedup. 
-[^bipartite]: The resulting production and consumption networks are necessarily bipartite since a species does not produce or consume from another species, and mediators do not produce and consume from other mediators. Edges only exist between mediators and species, two differently colored nodes. This is the definition of bipartite.
+[^bipartite]: The resulting production and consumption networks are necessarily bipartite since a species does not produce or consume directly to or from another species, and mediators do not produce and consume to or from other mediators. Edges only exist between mediators and species, two differently colored nodes. This is the definition of bipartite.
