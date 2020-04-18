@@ -1,4 +1,4 @@
-The following manuscript was created using Typora and unfortunately does not conform to Github's rudimentary Markdown syntax. A PDF render is provided, however Markdown is not a typesetting language and its formatting can be less than ideal at times. It is recommended to view the following document either in Typora or equivalent Markdown viewer, or read the PDF. 
+The following manuscript was created using Typora and unfortunately does not conform to Github's rudimentary Markdown syntax. A html render is provided, however Markdown is not a typesetting language and its formatting can be less than ideal at times. It is recommended to view the following document either in Typora or equivalent Markdown viewer, or read the html in browser. 
 
 # Coexistence-via-Chemical-Interactions: a Case Study in Language and Design Choices, Verification, and New Results
 

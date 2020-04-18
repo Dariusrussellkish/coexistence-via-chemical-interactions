@@ -1,0 +1,515 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>README</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color: #ffffff; --text-color: #333333; --select-text-bg-color: #B5D6FC; --select-text-font-color: auto; --monospace: "Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; tab-size: 4; background-position: inherit inherit; background-repeat: inherit inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) { 
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:last-child { margin-bottom: 0.5rem; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+p { line-height: inherit; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror-linenumber { }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; background-position: 0px 0px; background-repeat: initial initial; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print { 
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; overflow-x: hidden; background-position: initial initial; background-repeat: initial initial; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus, [contenteditable="false"]:active, [contenteditable="false"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); border: none; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background-color: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; background-position: initial initial; background-repeat: initial initial; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; }
+a.md-print-anchor { white-space: pre !important; border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; text-shadow: initial !important; background-position: 0px 0px !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; margin-top: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="flow"] svg, [lang="mermaid"] svg { max-width: 100%; height: auto; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom-width: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+svg[id^="mermaidChart"] { line-height: 1em; }
+mark { background-color: rgb(255, 255, 0); color: rgb(0, 0, 0); background-position: initial initial; background-repeat: initial initial; }
+.md-html-inline .md-plain, .md-html-inline strong, mark .md-inline-math, mark strong { color: inherit; }
+mark .md-meta { color: rgb(0, 0, 0); opacity: 0.3 !important; }
+
+
+:root {
+    --side-bar-bg-color: #fafafa;
+    --control-text-color: #777;
+}
+
+@include-when-export url(https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write {
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 30px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 2px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+}
+
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dfe2e5;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n),
+thead {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #dfe2e5;
+    border-bottom: 0;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #dfe2e5;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-lines {
+    padding-left: 4px;
+}
+
+.code-tooltip {
+    box-shadow: 0 1px 1px 0 rgba(0,28,36,.3);
+    border-top: 1px solid #eef2f2;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #e7eaed;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+code {
+    background-color: #f3f4f4;
+    padding: 0 2px 0 2px;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+
+
+.md-task-list-item > input {
+  margin-left: -1.3em;
+}
+
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+.md-mathjax-midline {
+    background: #fafafa;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    /*border: 1px solid #ddd;*/
+    border-radius: 3px;
+    padding: 2px 0px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag {
+    color: #a7a7a7;
+    opacity: 1;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+.sidebar-tabs {
+    border-bottom: none;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.file-node-content:hover .file-node-icon,
+.file-node-content:hover .file-node-open-state{
+    visibility: visible;
+}
+
+.mac-seamless-mode #typora-sidebar {
+    background-color: #fafafa;
+    background-color: var(--side-bar-bg-color);
+}
+
+.md-lang {
+    color: #b4654d;
+}
+
+.html-for-mac .context-menu {
+    --item-hover-bg-color: #E6F0FE;
+}
+
+#md-notification .btn {
+    border: 0;
+}
+
+.dropdown-menu .divider {
+    border-color: #e5e5e5;
+}
+
+.ty-preferences .window-content {
+    background-color: #fafafa;
+}
+
+.ty-preferences .nav-group-item.active {
+    color: white;
+    background: #999;
+}
+
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-mac'><p><span>The following manuscript was created using Typora and unfortunately does not conform to Github&#39;s rudimentary Markdown syntax. A PDF render is provided, however Markdown is not a typesetting language and its formatting can be less than ideal at times. It is recommended to view the following document either in Typora or equivalent Markdown viewer, or read the PDF. </span></p><h1><a name="coexistence-via-chemical-interactions-a-case-study-in-language-and-design-choices-verification-and-new-results" class="md-header-anchor"></a><span>Coexistence-via-Chemical-Interactions: a Case Study in Language and Design Choices, Verification, and New Results</span></h1><p><strong><span>Authors:</span></strong></p><ul><li><span>Darius Russell Kish</span><sup><span>1,2</span></sup></li><li><span>Yuezhen Chen</span><sup><span>1</span></sup></li><li><span>Jessica Fong Ng</span><sup><span>1</span></sup></li><li><span>Matthew Uy</span><sup><span>1</span></sup></li></ul><p><span>(1) </span><em><span>Department of Computer Science, Boston College</span></em></p><p><span>(2) </span><em><span>Department of Biology, Boston College</span></em></p><h3><a name="abstract" class="md-header-anchor"></a><span>Abstract</span></h3><hr /><p><span>[TODO]</span></p><h3><a name="introduction" class="md-header-anchor"></a><span>Introduction</span></h3><hr /><p><span>Mathematical modeling of population dynamics is ubiquitous in the sciences. From their applications in the presently relevant field of epidemics to population genetics, chemical kinetics, economics, and systems biology, discrete time-based simulations are used to solve systems of differential equations with no analytical solution. Often these systems are highly dependent on their input parameters and stochastic processes, so multiple replicates of the simulation are used to provide more reliable statistics of the models than one iteration provides.</span></p><p><span>Discrete time-based simulations are however costly due to difficulties in parallelizing the underlying simulation. While techniques for parallelizing along simulation time have arisen, they are not easily generalized to all problems of this type. The replicates are, however, independent simulations and are a prime example of an Embarrassingly Parallel problem. This allows for linear speedups by number of processors in nearly all cases.</span></p><p><span>Many of these simulation models are designed and written by scientists without a programming background, and thus suffer from inefficiencies surrounding memory allocation, inefficient re-writing of language-implemented algorithms, avoidance of language-specific features and parallel libraries. For example, many modern languages allow for complex array indexing and operations along its dimensions, which might be overlooked for their conceptually easier but bloated explicit implementations. Design for memory efficiency may be overlooked due to language-specifics and complications surrounding the underlying operations masked by high level syntax. Parallelization is often times overlooked due to its complicated nature at the language-level, especially surrounding Random Number Generators (RNGs). These language features are costly to learn for researchers focused on the conceptual design of these simulations and their results. Thus, many simulation projects that do not employ dedicated software engineers suffer from sub-optimal performance.</span></p><p><span>We chose a simulation in systems biology from Professor Babak Momeni&#39;s lab at Boston College. Its mathematical derivation can be found in </span><em><span>Momeni et al., 2017</span></em><span> and its implementation in Matlab and characterization in </span><em><span>Niehaus et al., 2019,</span></em><span> though we will provide a summary of its background, design, and characteristics here.</span></p><p><span>Microbial communities naively consist of microbes, small single-celled organisms that can form colonies consisting of cells from the same organism clustered together. While they are widely depicted as isolated colonies on petri dishes, these microbes do no always exist isolated in nature. Communities of microbial species have been found and characterized, sometimes displaying functionality that is not present in its basal components. Understanding the dynamics of microbial communities is vital to harnessing their functionality.</span></p><p><span>At a very high level, the Well-Mixed model represents a completely homogenous community. All cells can access all mediators in the same concentrations. This is representative of cultures grown in liquid media, which are generally shaken during incubation to ensure constant mixing. This simplifies the model greatly to exclude spatial distribution of species and mediators, needing diffusion constants for both in addition to the inclusion of boundary conditions. Choosing a Well-Mixed approach allows this model to be represented and simulated simply while maintaining relevance to real life scenarios. </span></p><p><span>The model can be represented as a graph with two classifications of Nodes, and two classifications of Edges. There are two node types, a species node and a mediator node. The species node has an attribute that tracks the number of cells of the species in the simulation, </span><em><span>S</span></em><span>. A mediator is some non-species component that can be produced or consumed by species. When a species consumes as mediator, it induces either a positive or negative effect on the fitness of the species. A mediator node has an attribute that tracks its concentration, </span><em><span>C</span></em><span>, and </span><em><span>K</span></em><span> corresponding to its saturation level</span><sup class='md-footnote'><a href='#dfref-footnote-1' name='ref-footnote-1'>1</a></sup><span>. The two edge types thus represent consumption and production. The production edge has an attribute corresponding to the amount of mediator produced by that species per time, 𝛽. A consumption edge has two attributes, the consumption rate, 𝛼, and its fitness effect, 𝜌.</span></p><p>&nbsp;</p><p><img src="figures/Figure1.svg" referrerpolicy="no-referrer" alt="Figure1"></p><p><strong><span>Figure 1:</span></strong><span> </span><em><span>An example graphical representation of a model. There are three species and two mediators. There are 3 production edges with corresponding </span><strong><span>𝛽</span></strong><span> values, and two consumption edges with corresponding </span><strong><span>𝛼</span></strong><span> and </span><strong><span>𝜌</span></strong><span> values. Edges are shown with direction to show the flow of mediator, though the actual network topology is undirected.</span></em><span> </span></p><p><span>These communities can be modeled using relatively simple rules and parameters. In its most simple form, the model is driven by two differential equations:</span></p><ol start='' ><li><img src="https://render.githubusercontent.com/render/math?math=\frac{dS_{i}}{dt} = [r_{i0} %2B \sum_{l}(\rho_{il}^{pos}\frac{C_{l}}{C_{l} %2B K_{il}} - \rho_{il}^{neg}\frac{C_{l}}{K_{il}})]S_{i}"></li></ol><ol start='2' ><li><img src="https://render.githubusercontent.com/render/math?math=\frac{dC_{l}}{dt} = \sum_{l}(\beta_{li}S_{i}-\alpha_{li}\frac{C_{l}}{C_{l} %2B K_{il}}S_{i})"></li></ol><p><span>where </span><strong><em><span>r0</span></em></strong><span> values are basal growth rates which are then modified by the growth rate kinetic components in the summations. In simplified terms, </span><strong><em><span>r0</span></em></strong><span> is the rate at which a species would grow without any outside influence. This base rate is modified both positively and negatively for promotion and inhibition respectively. </span></p><p><span>The full model takes into account dilutions and generations, claiming stability is often reached by 200 generations of growth. However, these rules are not represented in the basic equations. Once the total sum of all cells is above the dilution threshhold (experimentally, generally measured using optical density of solution), all cells are diluted proportionally back to an initial value. Species who posessed a greater fraction of total cells before dilution posess the same fraction after dilution. This is done to simulate real dilutions necessary to avoid extended periods of lag phase and cell death seen in experimental incubation without dilutions. Additionally, the formula </span><img src="https://render.githubusercontent.com/render/math?math=\log_{2}(\frac{dilTh}{nInitCells})"><span> is used to calculate the number of generations grown in one round of propogation, where </span><strong><em><span>dilTh</span></em></strong><span> is the dilution threshhold in number of cells, and </span><strong><em><span>nInitCells</span></em></strong><span> is the number of initial cells, in number of cells. An additional maximum time is imposed in the numerical implementation of 250 hours. If the dilution threshold is not reached by 250 hours, then it is automatically diluted and a new round of propogation is started. </span></p><p><span>Though the model is easiest graphically described, it exists in code as a series of matrices. As there are multiple species and mediators, their interactions can be described in an intraction matrix. Concentrations of species and mediators can be defined in their respective vectors. Production and consumption an also be defined in respective matrices. The enabled </span><em><span>Niehaus et al.</span></em><span> to represent equations </span><strong><span>1</span></strong><span> and </span><strong><span>2</span></strong><span> in their linear algebraic forms, taking advantage of fast matrix math libraries implemented in many modern languages. </span></p><p><span>The simulation consists of two parts: a simulation function, taking as inputs the above matrices and other scalar parameters which then runs through </span><strong><em><span>nGenerations</span></em></strong><span> of time, returning the surviving species and their percent compositions; and a simulation harness which generates randomized matrices within certain paramters to be passed to the simulation function. One iteration of the harness serves as one replicate.</span></p><h3><a name="results" class="md-header-anchor"></a><span>Results</span></h3><hr /><h5><a name="design-of-original-code" class="md-header-anchor"></a><span>Design of Original Code</span></h5><p><span>The simulation code was downloaded from the GitHub repository provided in </span><em><span>Niehaus et al., 2019</span></em><span>. It was developed in Matlab and each function was broken out into its own file. A list of functions and their English descriptions are provided below:</span></p><ul><li><p><em><span>(Boolean Array[n, m])</span></em><span> Binomial Network Configuration, (</span><strong><em><span>n=nSpecies, m= nMediators,  p</span></em></strong><span>)</span></p><ul><li><span>Generates a </span><strong><em><span>n</span></em></strong><span> x </span><strong><em><span>m</span></em></strong><span> boolean array used to mask interaction, production and consumption matrices. There is a probability </span><strong><em><span>p</span></em></strong><span> that any [i,j] cell becomes populated with a 1, and </span><strong><em><span>1-p</span></em></strong><span> that it is a 0. </span></li></ul></li><li><p><em><span>(Float Array[n, m])</span></em><span> Interaction Matrix Generation, (</span><strong><em><span>n=nSpecies, m=nMediator, ri0, fracPos</span></em></strong><span>)</span></p><ul><li><span>Generates a </span><strong><em><span>n</span></em></strong><span> x </span><strong><em><span>m</span></em></strong><span> interaction matrix with values between 0 and </span><strong><em><span>ri0</span></em></strong><span>, with </span><strong><em><span>1-fracPos</span></em></strong><span> interactions being negative. </span></li></ul></li><li><p><em><span>(nExisting[i], compositions[i])</span></em><span> WellMixedSimulation, (</span><em><span>simulation parameters</span></em><span>, see appendix A)</span></p><ul><li><span>Runs a simulation as described above for 200 generations and returns a vector of species that coexist at the end of simulation along with their percent compositions. </span></li></ul></li><li><p><em><span>Void</span></em><span> Simulation Harness, (</span><strong><em><span>nSamples</span></em></strong><span>, </span><em><span>harness parameters</span></em><span>, see appendix A) </span></p><ul><li><span>Generates inputs for </span><strong><em><span>nSamples</span></em></strong><span> simulations and runs them, tracking results and input parameters in arrays for further analysis. The resultant simulation data is serialized on disk for archiving and later analysis.</span></li></ul></li></ul><h5><a name="motivations-for-shift-in-language" class="md-header-anchor"></a><span>Motivations for Shift in Language</span></h5><p><span>Although the paper was published in an open access journal, Matlab is not an open source language. Many institutions maintain Matlab licenses, however costs for commercial and non-academic associated individuals is inhibitory when viable open source languages exist. Matlab additionally is not community developed, thus features available in other languages that may be beneficial to expansions of the model may not be feasibly implemented in Matlab. </span></p><p><span>An immediate example is sampling the initial species distributions from a non-uniform distribution. A proposed distribution for this task is the Dirichlet distribution, as it can be used to solve a string-cutting problem. In the string cutting problem, we want to cut a string into &quot;</span><strong><em><span>K</span></em></strong><span> pieces with different lengths, where each piece had a designated average length, but allowing some variation in the relative sizes of the pieces&quot;.</span><sup class='md-footnote'><a href='#dfref-footnote-2' name='ref-footnote-2'>2</a></sup><span> Such a distribution of solutions to this problem can be generated by the Dirichlet distribution. This problem is directly applicatble to initial distributions, where we have a set amount of initial cells which we want to assign to the species with average proportion while still allowing for variation. We can, for example, bias species one to on average start as 50% of the initial composition, or have average uniform starting compositions with intersample variations. In Python and Julia, this distribution is avaible in the Numpy and Distributions packages respectively, which are well defined and developed packages that have gone through extensive testing. In Matlab, the Dirichlet distribution is not included in its native distributions, and instead an untested solution exists as a snippet in an online blog post.</span><sup class='md-footnote'><a href='#dfref-footnote-3' name='ref-footnote-3'>3</a></sup><span> The lack of this feature through a well-vetted library can make finding an implementation difficult for a novice programmer and erode confidence in its implementation, since a novice programmer might lack the knowledge to test the unknown implementation. </span></p><h5><a name="choosing-a-new-target-language" class="md-header-anchor"></a><span>Choosing a New Target Language</span></h5><p><span> We explored multiple languages used in the scientific community to discern a viable new target language to port the existing code into. Our criteria were ease of syntax, well optimized high level operations, and fast matrix math. We wished to maintain the performance and ease of use for non-programmers of Matlab but in an open source language. This excluded C, C++, and FORTRAN despite their performance. Additionally, these languages lack reliable features for easy parallelization. A study by Jules Kouatchou published in NASA&#39;s </span><em><span>Modeling Guru</span></em><span> resource compares performance of common scientific languages in various scientific tasks from the framework of a novice programmer. It is unclear how many replicates were performed to eliminate random noise in execution time, however results were generally clear enough to guide our decisions. The results thus are not representative of highly optimized code in the language, rather general code that can be expected of a non-programmer researcher. We are primarily interested in results of matrix operations, since this is the major operation in the model. A excerpt summary of results are provided below:</span></p><ul><li><p><span>Array Copies</span></p><figure><table><thead><tr><th style='text-align:center;' ><span>Language</span></th><th style='text-align:center;' ><span>n=5000</span></th><th style='text-align:center;' ><span>n=9000</span></th></tr></thead><tbody><tr><td style='text-align:center;' ><span>Python + Numba</span></td><td style='text-align:center;' ><span>0.26</span></td><td style='text-align:center;' ><span>0.34</span></td></tr><tr><td style='text-align:center;' ><span>Julia</span></td><td style='text-align:center;' ><span>0.0907</span></td><td style='text-align:center;' ><span>0.2274</span></td></tr><tr><td style='text-align:center;' ><span>Matlab</span></td><td style='text-align:center;' ><span>0.2787</span></td><td style='text-align:center;' ><span>0.8437</span></td></tr><tr><td style='text-align:center;' ><span>R</span></td><td style='text-align:center;' ><span>19.750</span></td><td style='text-align:center;' ><span>63.820</span></td></tr><tr><td style='text-align:center;' ><span>Fortan + ifort -O3</span></td><td style='text-align:center;' ><span>0.0680</span></td><td style='text-align:center;' ><span>0.2120</span></td></tr></tbody></table></figure></li><li><p><span>Matrix Multiplication</span><sup class='md-footnote'><a href='#dfref-footnote-4' name='ref-footnote-4'>4</a></sup></p><figure><table><thead><tr><th style='text-align:center;' ><span>Language</span></th><th style='text-align:center;' ><span>n=5000</span></th><th style='text-align:center;' ><span>n=9000</span></th></tr></thead><tbody><tr><td style='text-align:center;' ><span>Python + Numba</span></td><td style='text-align:center;' ><span>3.64</span></td><td style='text-align:center;' ><span>13.57</span></td></tr><tr><td style='text-align:center;' ><span>Julia</span></td><td style='text-align:center;' ><span>0.1494</span></td><td style='text-align:center;' ><span>0.3497</span></td></tr><tr><td style='text-align:center;' ><span>Matlab</span></td><td style='text-align:center;' ><span>0.9567</span></td><td style='text-align:center;' ><span>0.2943</span></td></tr><tr><td style='text-align:center;' ><span>R</span></td><td style='text-align:center;' ><span>0.920</span></td><td style='text-align:center;' ><span>0.951</span></td></tr><tr><td style='text-align:center;' ><span>Fortan + DGEMM</span></td><td style='text-align:center;' ><span>0.2120</span></td><td style='text-align:center;' ><span>0.3320</span></td></tr></tbody></table></figure></li></ul><p><span>From these results, we see that Matlab is a very efficient language for its ease of use, explaining its strong foothold in the scientific community. R consistenly performs poorly and was eliminated. Although Python with Numba compilation provides generally good performance while maintaining access to the general purpose programming features of Python, it is outperformed by the language Julia in matrix math tasks. Julia additionally has intrinsic profiling tools to easily improve code performance. A comparison of available libraries for Python and Julia showed that for the scope of this model, Julia contained equivalents of Python libraries that would commonly be used to improve non-math aspects of the model. </span></p><p><span>While Python is a massively popular open source language with broad scope, this model inherently does not need to take advantage of many features present in Python. To optimize use of the model from a user standpoint, we identify useful feautures: serialization of variables to archive data for later use; configuration of input parameters from outside files; and visualization packages in the target language. These features can be achieved through the Serialization or JLD modules, JSON, and PyPlot modules in Julia respectively. Additionally, Julia is supported with Jupyter notebooks, allowing for equivalent usage in data analysis as Python. PyPlot is a wrapper of Python&#39;s PyPlot module, allowing equivalent usage. As the necessary features are present in both languages, Julia&#39;s impressive performance in the ciritcal sections drove out decision. Julia&#39;s syntax is a mix of Python and Matlab style syntax and is easy to pick up coming from eaither language. </span></p><p><span>Julia additionally features directives for multi-processor parallelization that are easier to utilize than Python&#39;s multiprocessing when no inter-process communication is necessary. Where in Matlab a </span><em><span>parfor</span></em><span> loop may be utilized, an equivalent </span><em><span>@distributed for</span></em><span> directive may be used in Julia when iterations of the for loop are independent, as they are in the model harness. RNGs can safely be utilized on each process through an array of Mersenne Twister RNGs that are jumped forward 10</span><sup><span>20</span></sup><span> steps from each other. This is similar to a process used in NumPy to achieve the an array of independent RNGs. The safe parallelization with easy syntax further solidified the decision to use Julia. </span></p><h5><a name="improvements-to-the-model-implementation" class="md-header-anchor"></a><span>Improvements to the Model Implementation</span></h5><p><span>As described above, the base structure of the model was kept the same, including its representation in matrices to achiever higher performance than abstract graphical representations. The harness was changed to allow passing of model parameters via configuration files. This prevents changes to hardcoded values in source code by users and instead facilitates interaction through safer configuration files. We have also updated the harness to use multi-processor parallelization and updated the RNG the appropriate parallel-safe method described above. Simulation variables are saved using JLD, which can then be reloaded into a key,value dictionary at a later time. We have included in the </span><em><span>figures</span></em><span> folder a Jupyter notebook showing the use of JLD and PyPlot modules to load a simulation output, analyze its results and generate complex figures. </span></p><p><span>The simulation code itself was majorly updated using guidance from the </span><em><span>@time</span></em><span> macro. Its direct port from Matlab showed that memory optimizations performed by Matlab were not performed by Julia, and calls to the simulation often involved upwards of 10 GB of memory allocations per call. This is indicative of repetitive creation of temporary variables to store intermediate results of complex expressions. It appears that Matlab breaks expressions into base components and allocates temporary variables outside of the loop with in-place operations to only allocate this memory once. Julia does not do this automatically, so manual breaking up expressions combined with creation of temporary variables outside of the loop and syntax hints for in-place operations were used to achieve similar performance. This did not change the expressions or logic used in the original implementation, in other words its high-level semantics, however it did change the syntax to match its low-level semtantcis to those of Matlab. </span></p><h5><a name="performance-improvements-in-julia" class="md-header-anchor"></a><span>Performance Improvements in Julia</span></h5><p><span>Moving the model into Julia with performance modifications and parallelization has lead to great improvements over its initial Matlab implementation. We recognize proper benchmarking of such a complicated model would be a long and arduous process, so the improvements noted here are anectdotal and a product of analysis of validation and further data collection jobs. We can, however, provide analysis of the code and language design to back our initial findings. </span></p><p><span>Julia&#39;s </span><em><span>Distributed</span></em><span> module is largely similar to Python&#39;s </span><em><span>Multiprocessing</span></em><span> module in terms of API, though the </span><em><span>@distributed</span></em><span> macro behaves closer to Matlabs </span><em><span>parfor</span></em><span> syntax. Julia approaches multiprocess parallelization by abstractly managing a cluster of worker processes, to which the main process submits jobs. While the mechanics and return values of interfacing with </span><em><span>Distributed</span></em><span> are beyond the scope of this paper, the </span><em><span>@sync @distributed</span></em><span> macro is straightforward.</span><sup class='md-footnote'><a href='#dfref-footnote-5' name='ref-footnote-5'>5</a></sup><span> This macro partitions the iterations of the loop to worker processes and the cluster waits for all iterations to complete before moving on in the program. Special array data types called </span><em><span>SharedArrays</span></em><span> prevent local copies of each simulation variable tracking array on each worker, and instead they write to the </span><em><span>SharedArray</span></em><span> on the main process. There is no memory access to these arrays, only writes which are guaranteed to not overlap, so there is no waiting for memory locks. As this is a facile case for such a system, where no locks or inter-process communication is needed, it sees nearly linear speedup with each additional processor. </span></p><p><span>All results presented below were run on Boston College&#39;s Research Cluster using either 28 or 40 CPU nodes containing Intel Xeon E5-2680 v4 and Intel Xeon Gold 6148 processors respectively, both at 2.40 GHz running Red Hat Enterprise Linux. In the original, linear Matlab version, the Stability Screen used to generate Figure 2b in </span><em><span>Niehaus et al., 2019</span></em><span> took approximately 8 hours and 15 minutes to complete 5000 samples. A parallelized version using Matlab&#39;s </span><em><span>parfor</span></em><span> loop used approximately 26 minutes wall time with 40 processors to complete 5000 samples, which is roughly  17 hours and 20 minutes of computational time. In Julia, however, the parallelized model for validation of </span><em><span>Niehaus et al.&#39;s</span></em><span> Figure 2b was achieved in 22 minutes wall time using 28 processors to complete 5000 samples. This is roughly 10 hours and 15 minutes of computational time. No linear Julia model was developed, however this is anecdotally an over 1.5x improvement over Matlab. </span></p><h5><a name="verification-of-the-model" class="md-header-anchor"></a><span>Verification of the Model</span></h5><p><span>To verify that the model performs equivalently to the Matlab variant, Figure 2b of </span><em><span>Niehaus et al., 2019</span></em><span> was chosen to be replicated. For this, simulation parameters provided in Appendix [B] nearly identical to those used in the original study were used. The proportions of number of species coexisting at the end of simulation were calculated for three interaction matrix parameters: 50/50 positive/negative interactions, 10/90 positive/negative interations, and 90/10 positive/negative interactions, corresponding to the </span><strong><em><span>fracPos</span></em></strong><span> variable in interaction matrix generation. </span></p><p><img src="figures/nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277.png" alt="nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277"/></p><p><strong><span>Figure 2:</span></strong><span> </span><em><span>Richness is defined as the number of coexisting species at the end of the simulation. Mostly positive (90/10) interaction matrices showed greater frequency of coexistence (richness &gt; 1) than 50/50 interactions, whose frequency of coexistence is greater than mostly negative (10/90) interactions. For non-trivial cases where lines overlap, integrating under the curve using a Left-Riemann sum will give definitive coexistence frequencies.</span></em><span> </span></p><p><span>The result of this simulations (Figure 2) strongly agrees with the results presented in </span><em><span>Niehaus et al., 2019</span></em><span>. Both overall shape of the frequency graph and the order of interaction matrices with their relative frequencies matches previous results. From these data we were confident our model is equivalent in behavior to that developed by </span><em><span>Niehaus et al.</span></em><span> and we could proceed with new analyses. </span></p><h5><a name="screening-consumption-and-production-network-parameters" class="md-header-anchor"></a><span>Screening Consumption and Production Network Parameters</span></h5><p><span>Facilitation and inhibition are driven by consumption edges in the model. When a species consumes a mediator, it has either a positive or negative effect on its growth rate, which is the deciding factor for species survival in the model. When a mediator is consumed, its concentration in solution is reduced until it is fully depleted. This is countered by production of consumers by Species, so the consumption and production of mediators is vital to dynamics that influence final composition. Production and consumption is driven by the underlying graph determining which species produce which mediators, and which consume which mediators. The simulation parameters for these two networks are </span><strong><em><span>qc</span></em></strong><span> and </span><strong><em><span>qp</span></em></strong><span> for probability of a consumer edge and probability of a producer edge respectively. This can be considered as binomial construction of edges with probability </span><strong><em><span>qc</span></em></strong><span> or </span><strong><em><span>qp</span></em></strong><span> between two colors of nodes, ensuring the resultant graph is bipartite.</span><sup class='md-footnote'><a href='#dfref-footnote-6' name='ref-footnote-6'>6</a></sup></p><p><strong><span>Optimal</span></strong><span> </span><em><span>qp</span></em><span> </span><strong><span>and </span></strong><span> </span><em><span>qc</span></em><span> </span><strong><span>Values are Dependent on the Number of Mediators</span></strong></p><p><span>The values of </span><strong><em><span>qc</span></em></strong><span> and </span><strong><em><span>qp</span></em></strong><span> were theorized to be important to the final richness of the community, as they have direct effects on growth rates of the species, and the presence of interaction edges. To gain a broad overview of their effects on richness, a screen of </span><strong><em><span>qc</span></em></strong><span> and </span><strong><em><span>qp</span></em></strong><span> ranging from 0 to 1 was conducted. Other simulation parameters similar to the stability screen used for validation. </span></p><p><img src="figures/Fine_Mean_Heatmap_nC_20_nM_15.png" referrerpolicy="no-referrer" alt="Fine_Mean_Heatmap_nC_20_nM_15"></p><p><strong><span>Figure 3:</span></strong><span> </span><em><span>When the number of Mediators is 15, the three interaction matrix paradigms display different optimal values for network configuration. In the mostly negative (10/90 +/-) interaction case, optimal values for consumption (</span><strong><span>qc</span></strong><span>) are clustered between 0.9 and 1, and for production (</span><strong><span>qp</span></strong><span>) between 0.1 and 0.3, with the maximal richness value of approximately 1.8 species occurring when </span><strong><span>qc</span></strong><span>=1 and </span><strong><span>qp</span></strong><span>=0.15. In the 50/50 +/- case the cluster of optimal values has shifted, with consumption between 0.05 and 0.15, and production between 0.45 and 1, with the maximum richness value of approximately 3 species occurring when </span><strong><span>qc</span></strong><span>=0.1 and </span><strong><span>qp</span></strong><span>=[0.6, 1]. In the case of mostly positive (90/10 +/-) interactions, a cluster similar to the 50/50 case is seen, however the maximum richness value of approximate 5 species is found when </span><strong><span>qc</span></strong><span>=0.[0.1, 15] and </span><strong><span>qp</span></strong><span>=[0.45, 0.7]. Heatmaps of the standard deviation and median values are available in the supplementary information.</span></em><span>  </span></p><p><span>A general trend across all cases is as the fraction of positive interactions increases, the mean richness increases across all </span><strong><em><span>qc</span></em></strong><span> and </span><strong><em><span>qp</span></em></strong><span> values (Figure 3). In the mostly negative case, the maximum achieved richness was under 2 species, where in the mostly positive case at least two thirds of all </span><strong><em><span>qc</span></em></strong><span> and </span><strong><em><span>qp</span></em></strong><span> values exhibited richness of 2 or larger. This suggests, as seen in Figure 2 as well, that richness is influenced by the fraction of positive to negative interactions regardless of the underlying consumption and production network.</span></p><p><span>The optimal values noted in Figure 3 differed slightly than previous unpublished results from the Momeni Lab. It was noted that their prior results were based on a simulation using 10 mediators, whereas our initial screen used 15 mediators. To elucidate the effect of the number mediators on the optimal </span><strong><em><span>qc</span></em></strong><span> and </span><strong><em><span>qp</span></em></strong><span> values, the number of mediators was screened from 5 to 20 mediators. This screen reveals an interaction between the number of mediators present in the simulation and the underlying production and consumption networks (Figure 4). There are different optimal network values for different numbers of mediators. </span></p><p><img src="figures/qp_qc_nMediator_screen.gif" referrerpolicy="no-referrer" alt="qp_qc_nMediator_screen"></p><p><strong><span>Figure 4:</span></strong><span> </span><em><span>Animated heat maps of probability of production edge (</span><strong><span>qp</span></strong><span>) and probability of consumption edge (</span><strong><span>qc</span></strong><span>) screens across changing number of mediators. Two general trends are noticed across all three interaction types. First, the drop-off of optimal values becomes steeper as the number of mediators is increased. This is seen as higher contrast between the yellow and blue (high and low) representations with increasingly fewer middle values. The second trend is a shift in the 50/50 +/- interaction cases from cluster around </span><strong><span>qc</span></strong><span>=0.2, </span><strong><span>qp</span></strong><span>=1 down and left to </span><strong><span>qc</span></strong><span>=[0.05, 0.1] </span><strong><span>qp</span></strong><span>=[0.5, 1]. In the 90/10 +/- case the range of optimal </span><strong><span>qp</span></strong><span> is narrowed to [0.4, 0.55]. For the mostly negative 10/90 +/- case, optimal </span><strong><span>qc</span></strong><span>=1 remained constant, though </span><strong><span>qp</span></strong><span> shifts from 0.3 to 0.1.</span></em><span> </span></p><p><span>Biologically, there is not a clear explanation for these results. Since the simulation trials are independent of each other, a wide variety of interaction values and topologies are tested. Changing the number of mediators available likely has complex but systematic affects on the availability of interactions that influence growth rate. Communities likely assemble in order to maximize their positive interactions while minimizing negative interactions between species, and the shifts seen suggest the number of mediators has an affect on this balance. The number of mediators in the simulation affects the ideal network topologies for production, consumption, and interaction through an unknown mechanism. </span></p><p><strong><span>Optimal</span></strong><span> </span><em><span>qp</span></em><span> </span><strong><span>and </span></strong><span> </span><em><span>qc</span></em><span> </span><strong><span>Values are Different for Competitive and Cooperative Communities</span></strong></p><p><span>As suggested above, coexisting communities are theorized to maximize their positive interactions while minimizing negative interactions. The percentage of positive to negative interactions seen </span><em><span>overall</span></em><span> in the simulation is dictated by the </span><strong><em><span>nFracPos</span></em></strong><span> variable. In Figures 3 and 4, values of 0.1, 0.5, and 0.9 were tested, however their results suggest significant movements in the region of </span><strong><em><span>nFracPos</span></em></strong><span>=[0, 0.5]. Values in the range of 0 to 1 in steps of 0.5 were screened to elucidate these movements. </span></p><p><img src="figures/qp_qc_fracPos_screen_normed.gif" referrerpolicy="no-referrer" alt="qp_qc_fracPos_screen_normed"></p><p>&nbsp;</p><p><img src="figures/qp_qc_fracPos_screen_linear.gif" referrerpolicy="no-referrer" alt="qp_qc_fracPos_screen_linear"></p><p><strong><span>Figure 5:</span></strong><span> </span><em><span>Animated heat maps of probability of production edge (</span><strong><span>qp</span></strong><span>) and probability of consumption edge (</span><strong><span>qc</span></strong><span>) screens across changing fraction of positive interaction in the interaction matrix. As shown in Figure 3, the mostly negative case (10/90 +/-) exhibited different clustering than the 50/50 and mostly positive case (90/10 +/-). This screen across the fraction of positive interactions reveals the shift in optimal </span><strong><span>qp</span></strong><span> and </span><strong><span>qc</span></strong><span> values for different community paradigms. In the top image, the heat map is normalized at every frame, whereas in the second image the scale is kept constant.</span></em><span> </span></p><p><span>In the normalized heat maps a clear shift from the high consumption and low production cluster in mostly negative interactions to the low consumption and median to high production cluster in </span><strong><em><span>nFracPos</span></em></strong><span> &gt;= 0.3 can be seen. This is however not present in the constant scale heat maps, and instead an emergence of the low consumption and median to high production cluster from across the board low richness is seen. </span></p><p><span>In the normalized heat map when </span><strong><em><span>nFracPos</span></em></strong><span> = 0.3, the maximum richness value is slightly above 2, however it is found in approximately the same location on the optimal </span><strong><em><span>qp, qc</span></em></strong><span> cluster as increasing </span><strong><em><span>nFracPos</span></em></strong><span> values. When </span><strong><em><span>nFracPos</span></em></strong><span> = 1, the maximum richness value is nearly 6, suggesting the optimal </span><strong><em><span>qp, qc</span></em></strong><span> values do not change significantly above </span><strong><em><span>nFracPos</span></em></strong><span> = 0.3, but </span><strong><em><span>nFracPos</span></em></strong><span> increasingly boosts the richness seen at these optimal values network values. </span></p><p><span>The normalized heat maps are also useful for gaining insight into the balance of the two clusters across </span><strong><em><span>nFracPos</span></em></strong><span> values. Communities can be thought of in two modalities: competitive and cooperative. In a competitive community, species have mostly negative effects on each other&#39;s fitness, whereas a positive community has mostly positive effects on fitness. When </span><strong><em><span>nFracPos</span></em></strong><span> is low, it represents competitive communities as there are mostly negative interactions occurring. In these cases, the heat maps suggest that high consumption and low production values are optimal. For high </span><strong><em><span>nFracPos</span></em></strong><span> values, it appears low consumption and a wider range of production values from 0.5 to 1 are optimal. As seen above, the data suggest a cutoff of 30% positive interactions for communities to shift from competitive network topology to cooperative network topology. In other words, cooperative communities begin to form when there are at least 30% positive interactions. The differing but sustained regions of optimal network topology between modalities suggest a fundamental difference between the mechanisms that cooperative and competitive communities form stability. </span></p><h3><a name="discussion" class="md-header-anchor"></a><span>Discussion</span></h3><hr /><h3><a name="methods" class="md-header-anchor"></a><span>Methods</span></h3><hr /><p>&nbsp;</p><h3><a name="data-availability" class="md-header-anchor"></a><span>Data Availability</span></h3><hr /><p><span>All data are available upon request. All JLD files were generated with Julia version 1.4.0 (2020-03-21) with JLD version 0.9.2. It cannot be guaranteed that newer or older releases of either Julia or JLD will be compatible with these save files. If major changes to the availability of Julia v1.4.0 or JLD v0.9.2 become known, we will do our best to migrate the save files to a different, more available format. </span></p><h3><a name="code-availability" class="md-header-anchor"></a><span>Code Availability</span></h3><hr /><h3><a name="acknowledgements" class="md-header-anchor"></a><span>Acknowledgements</span></h3><p><span>The original mathematical model was conceived by Wenying Shou and Babak Momeni and implemented in Matlab by Minghao Liu and B.M. </span></p><hr /><h3><a name="author-information" class="md-header-anchor"></a><span>Author Information</span></h3><p><strong><span>Affiliations</span></strong></p><p><em><span>Department of Computer Science, Boston College, Chestnut Hill, MA, 02467</span></em><span>, USA</span></p><p><span>Darius Russell Kish, Yuezhen Chen, Jessica Fong Ng, Matthew Uy</span></p><p><em><span>Department of Biology, Boston College, Chestnut Hill, MA, 02467</span></em><span>, USA</span></p><p><span>Darius Russell Kish</span></p><p><strong><span>Contributions</span></strong></p><p><span>Implementation in Julia was written by D.R.K. Simulations and data analyses were conceived by D.R.K. and Babak Momeni, and run by D.R.K. D.R.K. wrote the manuscript and [TODO]</span></p><p><strong><span>Corresponding Author</span></strong></p><p><span>Correspondence to </span><a href='mailto:russeldk@bc.edu'><span>Darius Russell Kish</span></a><span>. </span></p><hr /><h3><a name="appendices" class="md-header-anchor"></a><span>Appendices</span></h3><hr /><h3><a name="supplementary-information" class="md-header-anchor"></a><span>Supplementary Information</span></h3><hr /><h3><a name="references" class="md-header-anchor"></a><span>References</span></h3><div class='footnotes-area'  ><hr/>
+<div class='footnote-line'><span class='md-fn-count'>1</span> <span>This is perhaps the most challenging aspect of this model to understand for non-biologists as it relates to cell growth kinetics. For the case of inhibition, the model uses the formula: </span><img src="https://render.githubusercontent.com/render/math?math=r(C_{inh}) = r_{0} - r_{inh}\frac{C_{inh}}{K_{inh}}"><span>, where </span><img src="https://render.githubusercontent.com/render/math?math={K_{inh}}"><span> is the corresponding </span><em><span>k</span></em><span> value in </span><strong><em><span>K</span></em></strong><span>. The amplitude of effect on growth rate is controlled by </span><strong><em><span>K</span></em></strong><span> for inhibition. For positive interactions, or facilitation, the model uses  </span><img src="https://render.githubusercontent.com/render/math?math=r(C_{fac}) = r_{0} %2B r_{fac}\frac{C_{fac}}{C_{fac} %2B K_{inh}}"><span>, a form of the Monod equation. Here, </span><em><span>k</span></em><span> determines at what concentration of C that </span><img src="https://render.githubusercontent.com/render/math?math=\frac{r_{fac}}{2}"><span> will be reached, and </span><img src="https://render.githubusercontent.com/render/math?math=r_{fac}"><span> is the saturated effect on the growth constant by the mediator. These equations are determined from experimental data studying growth curves. For more information see </span><em><span>Merchuk and Asenjo, 1995</span></em><span> and </span><em><span>Konak, 1974.</span></em><span> </span> <a name='dfref-footnote-1' href='#ref-footnote-1' title='back to document' class='reversefootnote' >↩</a></div>
+<div class='footnote-line'><span class='md-fn-count'>2</span> <a href='https://en.wikipedia.org/wiki/Dirichlet_distribution#String_cutting' target='_blank' class='url'>https://en.wikipedia.org/wiki/Dirichlet_distribution#String_cutting</a> <a name='dfref-footnote-2' href='#ref-footnote-2' title='back to document' class='reversefootnote' >↩</a></div>
+<div class='footnote-line'><span class='md-fn-count'>3</span> <a href='https://cxwangyi.wordpress.com/2009/03/18/to-generate-random-numbers-from-a-dirichlet-distribution/' target='_blank' class='url'>https://cxwangyi.wordpress.com/2009/03/18/to-generate-random-numbers-from-a-dirichlet-distribution/</a> <a name='dfref-footnote-3' href='#ref-footnote-3' title='back to document' class='reversefootnote' >↩</a></div>
+<div class='footnote-line'><span class='md-fn-count'>4</span> <span>It is mentioned that a loop is used for multiplication in the Python+Numba benchmark, which appears not to be optimized into very efficient BLAS or LAPACK calls, accounting for this poor performance. This, however, may be indicative that it is not easy to invoke calls to these underlying libraries from Numba as a novice programmer. Their existance may also not be known, and thus not searched for when unexpected poor performance in encountered. </span> <a name='dfref-footnote-4' href='#ref-footnote-4' title='back to document' class='reversefootnote' >↩</a></div>
+<div class='footnote-line'><span class='md-fn-count'>5</span> <span>The </span><em><span>@sync</span></em><span> macro further abstracts Julia&#39;s </span><em><span>Distributed</span></em><span> design from the user by waiting for all iterations of the for loop to complete before moving on. In our case we care that the full loop is finished before serializing the results to disk. Without this there is a possibility that the results are incomplete in to the User. It has no substantial penalty on speedup. </span> <a name='dfref-footnote-5' href='#ref-footnote-5' title='back to document' class='reversefootnote' >↩</a></div>
+<div class='footnote-line'><span class='md-fn-count'>6</span> <span>The resulting production and consumption networks are necessarily bipartite since a species does not produce or consume directly to or from another species, and mediators do not produce and consume to or from other mediators. Edges only exist between mediators and species, two differently colored nodes. This is the definition of bipartite.</span> <a name='dfref-footnote-6' href='#ref-footnote-6' title='back to document' class='reversefootnote' >↩</a></div></div></div>
+</body>
+</html>
