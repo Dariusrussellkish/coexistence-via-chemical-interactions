@@ -179,11 +179,23 @@ The normalized heat maps are also useful for gaining insight into the balance of
 
 ------
 
+**Importance of Language and Design Choices**
+
+Although hardware performance continues to improve each year, bringing powerful computational power even to consumer hardware, it continues to be important for the efficacy of scientific computing to leverage little-cost performance enhancements in their design. The era of requiring C and FORTRAN to optimize performance is largely over in a large number of use cases for discrete simulations in scientific computer. Python offers Numpy and Numba combined with its multiprocessing module to offer easy to use and fast, optimized matrix math. Julia has also been shown to outperform Python in certain cases, such as in our case study of optimizing the performance of the Momeni Lab's community coexistence through explicit mediator interactions model. This reimplementation required little work beyond integrating the distributed macro into the replicate loop and unrolling complex statements in the discrete simulation function. In informal performance analysis the Julia implementation scales *1.5n* over the serial Matlab version, where *n* is the number of CPUs used in parallel simulation. This is a significant speedup on modern computational clusters which often feature nodes of 20-40 CPUs, allowing massively more data to be generated in the same wall time. This speedup allowed for such general screen across 3 variables to be performed in reasonable times, which previously was not possible. 
+
+**Characteristics of Cooperative and Competitive Communities**
+
+Previous work in *Niehaus et al., 2019* presented evidence that cooperative communities have higher richness than competitive communities, indicating higher levels of coexistence. In our screens of ***qp, qc*** against ***fracPos***, we confirm that overall cooperative communities have higher levels of coexistence across their network topologies than competitive communities. We additionally identify two distinct regions of optimal network topology for cooperative and competitive communities respectively. For cooperative communities, the region of high production and low consumption suggests an excess of all mediators, who generally produce positive effects on species fitness, is preferred. For competitive communities, high consumption and low production values are favored, suggesting communities leverage the few mediators that produce positive effects while minimizing production of negative influencing mediators. *Niehaus et al.* suggests coexistence can be thought of finding a subset of species that allows for eigenvalue maximization of <img src="https://render.githubusercontent.com/render/math?math=(r_{0} %2B P\theta)">, where <img src="https://render.githubusercontent.com/render/math?math=r_{0}"> is the vector of basal growth rates, *P* is the matrix of interaction strengths and matrix <img src="https://render.githubusercontent.com/render/math?math=\theta"> indicates presence of a mediator in the final community. This can be thought rather informally as maximizing positive interactions and minimizing negative interactions in the community. 
+
+Screening for number of mediators in the simulation revealed small changes in the optimal ***qp, qc*** values, however the shape and locations of the regions remained roughly the same. This suggests that the network topology is dependent on the number of mediators. However, the presence of these two distinct regions across number of mediators indicates the modality of community assembly is fundamentally different for cooperative and competitive species. The specifics of drop-off in optimal values and optimal ranges shift, but their modalities or strategies as described above remain the same. As these simulations rely on general parameters as input and represent abstract communities, we believe this these results confirm that cooperation leads to coexistence, and cooperative and competitive communities utilize different modalities in assembling, leading to vastly different network topologies. These findings can be applied to the growing application of these models to scenarios of community invasion and stability studies, where stable communities undergo sudden attack from competitive species or other drastic changes. These changes likely affect the underlying strategies for coexistence within the community, and as we see the optimal topologies differ greatly between strategies, the network topology will be important to the outcome of invasions or sudden changes.
+
 ### Methods
 
 ------
 
+**Simulation Environment**
 
+The prototype functions and the discrete time simulation were implemented in Julia version 1.4.0 using built in matrix math functions and the Distributed package for parallelization. Relevant environment variables were serialized using JLD for later analysis. Simulations were run on Boston College's Research Cluster using Intel Xeon E5-2680 v4 and Intel Xeon Gold 6148 processors, and the resulting JLD files were transferred locally for analysis using Julia's PyPlot in Jupyter Notebooks. All code is available through GitHub. 
 
 ### Data Availability
 
@@ -194,6 +206,10 @@ All data are available upon request. All JLD files were generated with Julia ver
 ### Code Availability
 
 ------
+
+All source files and Jupyter Notebooks are available through GitHub: https://github.com/Dariusrussellkish/coexistence-via-chemical-interactions 
+
+JLD save files are available upon request. 
 
 ### Acknowledgements
 
