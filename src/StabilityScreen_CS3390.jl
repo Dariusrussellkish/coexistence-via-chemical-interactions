@@ -10,6 +10,7 @@ using Distributed
 using Serialization
 using JLD
 using JSON
+using UUIDs
 @everywhere using Logging
 @everywhere include("DistInteractionStrengthMT_PB.jl")
 @everywhere include("NetworkConfig_Binomial.jl")
@@ -313,7 +314,9 @@ open(ARGS[1], "r") do io
     qp = params["qp"] # probability of production link per population
     qc = params["qc"] # probability of influence link per population
 
-    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_CS3390_HEATMAP_seed_$(rndseed0)"
+    stripChar = (s, r) -> replace(s, Regex("[$r]") => "")
+    filename_uuid = stripChar(string(uuid4()), "-")
+    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_CS3390_HEATMAP_seed_$(rndseed0)_$(filename_uuid)"
 
     NE0D,
     CmpADT,
@@ -380,18 +383,3 @@ open(ARGS[1], "r") do io
 
     println(maximum(NE0D))
 end
-# serialize("$basename.save",
-# (
-# NE0D = NE0D,
-# CmpADT = CmpADT,
-# CmpBDT = CmpBDT,
-# CmpEDT = CmpEDT,
-# r0T = r0T,
-# SiT = SiT,
-# AT = AT,
-# BT = BT,
-# rintAT = rintAT,
-# rintBT = rintBT,
-# rintET = rintET,
-# V0DT = V0DT,
-# ))
