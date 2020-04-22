@@ -1,6 +1,6 @@
-The following manuscript was created using Typora and unfortunately does not conform to Github's rudimentary Markdown syntax. A html render is provided, however Markdown is not a typesetting language and its formatting can be less than ideal at times. It is recommended to view the following document either in Typora or equivalent Markdown viewer, or read the html in browser. 
+The following manuscript was created using Typora and unfortunately does not conform to Github's rudimentary Markdown syntax. A html render is provided. It is recommended to view the following document either in Typora or equivalent Markdown viewer, or read the html in browser. 
 
-# Coexistence-via-Chemical-Interactions: a Case Study in Language and Design Choices, Verification, and New Results
+# Coexistence-via-Chemical-Interactions: a Case Study in Language and Design Choices, and Verification; with New Results
 
 **Authors:**
 
@@ -17,19 +17,19 @@ The following manuscript was created using Typora and unfortunately does not con
 
 ------
 
-[TODO]
+Computational *in silico* modeling in the sciences is becoming an increasingly important tool for modeling systems that cannot be easily tested physically. These models often utilize discrete time simulation in addition to stochastic processes that necessitate replicates to gain an meaningful interpretation of the simulations. The quality of simulation design and code plays an integral role in the amount of data that can efficiently be generated from such models. We study a mediator-explicit microbial community model described in *Niehaus et al. 2019*, updating its design to use multi-process parallelism in the language Julia enabling large throughput screens of its parameters. These screens were infeasible before due to running time limits, and have yielded important findings of dependence of community richness on underlying production and consumption network parameters. 
 
 ### Introduction
 
 ------
 
-Mathematical modeling of population dynamics is ubiquitous in the sciences. From their applications in the presently relevant field of epidemics to population genetics, chemical kinetics, economics, and systems biology, discrete time-based simulations are used to solve systems of differential equations with no analytical solution. Often these systems are highly dependent on their input parameters and stochastic processes, so multiple replicates of the simulation are used to provide more reliable statistics of the models than one iteration provides.
+Computational modeling of complex problems has become ubiquitous in the sciences. From their applications in the presently relevant field of epidemics to population genetics, chemical kinetics, economics, and systems biology, discrete time-based simulations are used to solve systems of differential equations with no analytical solutions.[^options][^ecology][^epidemic][^population] Often these systems are highly dependent on their input parameters and stochastic processes, so multiple replicates of the simulation are used to provide more reliable statistics of the models than one iteration provides.
 
 Discrete time-based simulations are however costly due to difficulties in parallelizing the underlying simulation. While techniques for parallelizing along simulation time have arisen, they are not easily generalized to all problems of this type. The replicates are, however, independent simulations and are a prime example of an Embarrassingly Parallel problem. This allows for linear speedups by number of processors in nearly all cases.
 
 Many of these simulation models are designed and written by scientists without a programming background, and thus suffer from inefficiencies surrounding memory allocation, inefficient re-writing of language-implemented algorithms, avoidance of language-specific features and parallel libraries. For example, many modern languages allow for complex array indexing and operations along its dimensions, which might be overlooked for their conceptually easier but bloated explicit implementations. Design for memory efficiency may be overlooked due to language-specifics and complications surrounding the underlying operations masked by high level syntax. Parallelization is often times overlooked due to its complicated nature at the language-level, especially surrounding Random Number Generators (RNGs). These language features are costly to learn for researchers focused on the conceptual design of these simulations and their results. Thus, many simulation projects that do not employ dedicated software engineers suffer from sub-optimal performance.
 
-We chose a simulation in systems biology from Professor Babak Momeni's lab at Boston College. Its mathematical derivation can be found in *Momeni et al., 2017* and its implementation in Matlab and characterization in *Niehaus et al., 2019,* though we will provide a summary of its background, design, and characteristics here.
+We chose a simulation in systems biology from Professor Babak Momeni's lab at Boston College. Its mathematical derivation can be found in *Momeni et al., 2017*[^momeni] and its implementation in Matlab and characterization in *Niehaus et al., 2019,*[^niehaus] though we will provide a summary of its background, design, and characteristics here.
 
 Microbial communities naively consist of microbes, small single-celled organisms that can form colonies consisting of cells from the same organism clustered together. While they are widely depicted as isolated colonies on petri dishes, these microbes do no always exist isolated in nature. Communities of microbial species have been found and characterized, sometimes displaying functionality that is not present in its basal components. Understanding the dynamics of microbial communities is vital to harnessing their functionality.
 
@@ -70,9 +70,9 @@ The simulation code was downloaded from the GitHub repository provided in *Nieha
   * Generates a ***n*** x ***m*** boolean array used to mask interaction, production and consumption matrices. There is a probability ***p*** that any [i,j] cell becomes populated with a 1, and ***1-p*** that it is a 0. 
 * *(Float Array[n, m])* Interaction Matrix Generation, (***n=nSpecies, m=nMediator, ri0, fracPos***)
   * Generates a ***n*** x ***m*** interaction matrix with values between 0 and ***ri0***, with ***1-fracPos*** interactions being negative. 
-* *(nExisting[i], compositions[i])* WellMixedSimulation, (*simulation parameters*, see appendix A)
+* *(nExisting[i], compositions[i])* WellMixedSimulation, (*simulation parameters*, see Supplementary info.)
   * Runs a simulation as described above for 200 generations and returns a vector of species that coexist at the end of simulation along with their percent compositions. 
-* *Void* Simulation Harness, (***nSamples***, *harness parameters*, see appendix A) 
+* *Void* Simulation Harness, (***nSamples***, *harness parameters* Supplementary info.) 
   * Generates inputs for ***nSamples*** simulations and runs them, tracking results and input parameters in arrays for further analysis. The resultant simulation data is serialized on disk for archiving and later analysis.
 
 ##### Motivations for Shift in Language
@@ -83,7 +83,7 @@ An immediate example is sampling the initial species distributions from a non-un
 
 ##### Choosing a New Target Language
 
- We explored multiple languages used in the scientific community to discern a viable new target language to port the existing code into. Our criteria were ease of syntax, well optimized high level operations, and fast matrix math. We wished to maintain the performance and ease of use for non-programmers of Matlab but in an open source language. This excluded C, C++, and FORTRAN despite their performance. Additionally, these languages lack reliable features for easy parallelization. A study by Jules Kouatchou published in NASA's *Modeling Guru* resource compares performance of common scientific languages in various scientific tasks from the framework of a novice programmer. It is unclear how many replicates were performed to eliminate random noise in execution time, however results were generally clear enough to guide our decisions. The results thus are not representative of highly optimized code in the language, rather general code that can be expected of a non-programmer researcher. We are primarily interested in results of matrix operations, since this is the major operation in the model. A excerpt summary of results are provided below:
+ We explored multiple languages used in the scientific community to discern a viable new target language to port the existing code into. Our criteria were ease of syntax, well optimized high level operations, and fast matrix math. We wished to maintain the performance and ease of use for non-programmers of Matlab but in an open source language. This excluded C, C++, and FORTRAN despite their performance. Additionally, these languages lack reliable features for easy parallelization. A study by Jules Kouatchou published in NASA's *Modeling Guru* resource compares performance of common scientific languages in various scientific tasks from the framework of a novice programmer.[^guru] It is unclear how many replicates were performed to eliminate random noise in execution time, however results were generally clear enough to guide our decisions. The results thus are not representative of highly optimized code in the language, rather general code that can be expected of a non-programmer researcher. We are primarily interested in results of matrix operations, since this is the major operation in the model. A excerpt summary of results are provided below:
 
 * Array Copies
 
@@ -105,7 +105,7 @@ An immediate example is sampling the initial species distributions from a non-un
   |       R        | 0.920  | 0.951  |
   | Fortan + DGEMM | 0.2120 | 0.3320 |
 
-From these results, we see that Matlab is a very efficient language for its ease of use, explaining its strong foothold in the scientific community. R consistenly performs poorly and was eliminated. Although Python with Numba compilation provides generally good performance while maintaining access to the general purpose programming features of Python, it is outperformed by the language Julia in matrix math tasks. Julia additionally has intrinsic profiling tools to easily improve code performance. A comparison of available libraries for Python and Julia showed that for the scope of this model, Julia contained equivalents of Python libraries that would commonly be used to improve non-math aspects of the model. 
+From these results, we see that Matlab is a very efficient language for its ease of use, explaining its strong foothold in the scientific community. These results are further backed by benchmarking hosted by Debian.[^debian] R consistenly performs poorly and was eliminated. Although Python with Numba compilation provides generally good performance while maintaining access to the general purpose programming features of Python, it is outperformed by the language Julia in matrix math tasks. Julia additionally has intrinsic profiling tools to easily improve code performance. A comparison of available libraries for Python and Julia showed that for the scope of this model, Julia contained equivalents of Python libraries that would commonly be used to improve non-math aspects of the model. 
 
 While Python is a massively popular open source language with broad scope, this model inherently does not need to take advantage of many features present in Python. To optimize use of the model from a user standpoint, we identify useful feautures: serialization of variables to archive data for later use; configuration of input parameters from outside files; and visualization packages in the target language. These features can be achieved through the Serialization or JLD modules, JSON, and PyPlot modules in Julia respectively. Additionally, Julia is supported with Jupyter notebooks, allowing for equivalent usage in data analysis as Python. PyPlot is a wrapper of Python's PyPlot module, allowing equivalent usage. As the necessary features are present in both languages, Julia's impressive performance in the ciritcal sections drove out decision. Julia's syntax is a mix of Python and Matlab style syntax and is easy to pick up coming from eaither language. 
 
@@ -127,7 +127,7 @@ All results presented below were run on Boston College's Research Cluster using 
 
 ##### Verification of the Model
 
-To verify that the model performs equivalently to the Matlab variant, Figure 2b of *Niehaus et al., 2019* was chosen to be replicated. For this, simulation parameters provided in Appendix [B] nearly identical to those used in the original study were used. The proportions of number of species coexisting at the end of simulation were calculated for three interaction matrix parameters: 50/50 positive/negative interactions, 10/90 positive/negative interations, and 90/10 positive/negative interactions, corresponding to the ***fracPos*** variable in interaction matrix generation. 
+To verify that the model performs equivalently to the Matlab variant, Figure 2b of *Niehaus et al., 2019* was chosen to be replicated. For this, simulation parameters provided in the Supplementary Information nearly identical to those used in the original study were used. The proportions of number of species coexisting at the end of simulation were calculated for three interaction matrix parameters: 50/50 positive/negative interactions, 10/90 positive/negative interations, and 90/10 positive/negative interactions, corresponding to the ***fracPos*** variable in interaction matrix generation. 
 
 <img src="figures/nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277.png" alt="nGen_200_nCellType_10_nMediator_10_ri0_0.2_posIntRatio_0.1_at_1_bt_0.1_qp_0.7_qc_0.7_seed_1586546277"/>
 
@@ -213,11 +213,13 @@ JLD save files are available upon request.
 
 ### Acknowledgements
 
-The original mathematical model was conceived by Wenying Shou and Babak Momeni and implemented in Matlab by Minghao Liu and B.M. 
-
 ------
 
+The original mathematical model was conceived by Wenying Shou and Babak Momeni and implemented in Matlab by Minghao Liu and B.M. 
+
 ### Author Information
+
+------
 
 **Affiliations**
 
@@ -237,22 +239,93 @@ Implementation in Julia was written by D.R.K. Simulations and data analyses were
 
 Correspondence to [Darius Russell Kish](mailto:russeldk@bc.edu). 
 
-------
-
-### Appendices
-
-------
-
 ### Supplementary Information
 
 ------
 
+**Harness Parameters**
+
+```python
+{
+  "nSample" : 2500, # number of samples
+  "nGen" : 200, # number of generations 
+  "nInitialCell" : 1E4, # number of initial cells in simulations
+  "dilTh" : 1E10, # theshhold number of cells for dilution
+  "nCellType" : 20, # number of cell types (species)
+  "nMediator" : 15, # number of mediators
+  "kSatLevel" : 1E4, # interaction strength saturation level of each population
+  "extTh" : 0.1, # threshhold for extinction at end of simulation
+  "ri0" : 0.2, # maximum interaction strength
+  "posIntRatio" : 0.1, # fraction of positive interactions
+  "tau0" : 0, # intial time 
+  "tauf" : 250, # end time
+  "dtau" : 0.01, # time step
+  "at" : 1, # avg. consumption values
+  "bt" : 0.1, #  avg. production values
+  "qp" : 0.7, # probability of a consumption edge, ignored for screens
+  "qc" : 0.7, # probability of a production edge, ignored for screens
+  "coarseness" : 20, # scale of qp,qc screen
+  "minFracPos" : 0, # used for fracPos screen
+  "maxFracPos" : 0.25, # used for fracPos screen
+  "deltaFracPos" : 0.05 # used for fracPos screen
+}
+```
+
+**Simulation Parameters**
+
+```julia
+# Approximate typings for WellmixedInteraction_DpMM_ExMT4
+nRound::Integer
+r0::Float64[nCellType]
+cellRatioArray::Float64[nMediator][nCellType]
+rIntMatA::Float64[nMediator][nCellType]
+nInitialCell::Float64[nCellType]
+kSatVector::Float64[nCellType]
+A::Float64[nMediator][nCellType]
+B::Float64[nMediator][nCellType]
+kSatLevel::Float64[nCellType]
+extTh::Float64
+dilTh::Float64
+tauf::Float64
+dtau::Float64
+```
+
+
+
+**Supplementary Figures**
+
+![Fine_Median_Heatmap_nC_20_nM_5](figures/Fine_Median_Heatmap_nC_20_nM_5.png)
+
+![Fine_Median_Heatmap_nC_20_nM_10](figures/Fine_Median_Heatmap_nC_20_nM_10.png)
+
+![Fine_Median_Heatmap_nC_20_nM_15](figures/Fine_Median_Heatmap_nC_20_nM_15.png)
+
+![Fine_Median_Heatmap_nC_20_nM_20](figures/Fine_Median_Heatmap_nC_20_nM_20.png)
+
+![Fine_Std_Heatmap_nC_20_nM_5](figures/Fine_Std_Heatmap_nC_20_nM_5.png)
+
+![Fine_Std_Heatmap_nC_20_nM_10](figures/Fine_Std_Heatmap_nC_20_nM_10.png)
+
+![Fine_Std_Heatmap_nC_20_nM_15](figures/Fine_Std_Heatmap_nC_20_nM_15.png)
+
+![Fine_Std_Heatmap_nC_20_nM_20](figures/Fine_Std_Heatmap_nC_20_nM_20.png)
+
+
+
 ### References
 
+[^options]: Dar, Amir & Anuradha, N. Option Pricing Using Monte Carlo Simulation. *British Journal of Economics, Finance and Management Sciences*. **13**. 53-81 (2017). 
+[^ecology]: Mancy, R., Prosser, P. & Rogers, S. Discrete and continuous time simulations of spatial ecological processes predict different final population sizes and interspecific competition outcomes. *Ecol. Modell.* **259**, 50–61 (2013).
+[^epidemic]: Nguyen, V., Mikolajczyk, R. & Hernandez-Vargas, E. High-resolution epidemic simulation using within-host infection and contact data. *BMC Public Health* **18,** 886 (2018). https://doi.org/10.1186/s12889-018-5709-x 
+[^population]: Tkachenko N, Weissmann JD, Petersen WP, Lake G, Zollikofer CPE, et al. (2017) Individual-based modelling of population growth and diffusion in discrete time. PLOS ONE 12(4): e0176101. https://doi.org/10.1371/journal.pone.0176101 
+[^momeni]: Momeni, B., Xie, L. & Shou, W. Lotka–Volterra pairwise modeling fails to capture diverse pairwise microbial interactions. *eLife* **6**, e25051 (2017). 
+[^niehaus]: Niehaus, L., Boland, I., Liu, M. *et al.* Microbial coexistence through chemical-mediated interactions. *Nat Commun* **10,** 2052 (2019). https://doi.org/10.1038/s41467-019-10062-x 
 [^ksat]: This is perhaps the most challenging aspect of this model to understand for non-biologists as it relates to cell growth kinetics. For the case of inhibition, the model uses the formula: <img src="https://render.githubusercontent.com/render/math?math=r(C_{inh}) = r_{0} - r_{inh}\frac{C_{inh}}{K_{inh}}">, where <img src="https://render.githubusercontent.com/render/math?math={K_{inh}}"> is the corresponding *k* value in ***K***. The amplitude of effect on growth rate is controlled by ***K*** for inhibition. For positive interactions, or facilitation, the model uses  <img src="https://render.githubusercontent.com/render/math?math=r(C_{fac}) = r_{0} %2B r_{fac}\frac{C_{fac}}{C_{fac} %2B K_{inh}}">, a form of the Monod equation. Here, *k* determines at what concentration of C that <img src="https://render.githubusercontent.com/render/math?math=\frac{r_{fac}}{2}"> will be reached, and <img src="https://render.githubusercontent.com/render/math?math=r_{fac}"> is the saturated effect on the growth constant by the mediator. These equations are determined from experimental data studying growth curves. For more information see *Merchuk and Asenjo, 1995* and *Konak, 1974.* 
 
 [^stringcutting]: https://en.wikipedia.org/wiki/Dirichlet_distribution#String_cutting
 [^matlabdrchrnd]: https://cxwangyi.wordpress.com/2009/03/18/to-generate-random-numbers-from-a-dirichlet-distribution/
+[^guru]: https://modelingguru.nasa.gov/docs/DOC-2783
+[^debian]:https://benchmarksgame-team.pages.debian.net/benchmarksgame/which-programs-are-fastest.html
 [^pythonnumba]: It is mentioned that a loop is used for multiplication in the Python+Numba benchmark, which appears not to be optimized into very efficient BLAS or LAPACK calls, accounting for this poor performance. This, however, may be indicative that it is not easy to invoke calls to these underlying libraries from Numba as a novice programmer. Their existance may also not be known, and thus not searched for when unexpected poor performance in encountered. 
 [^sync]: The *@sync* macro further abstracts Julia's *Distributed* design from the user by waiting for all iterations of the for loop to complete before moving on. In our case we care that the full loop is finished before serializing the results to disk. Without this there is a possibility that the results are incomplete in to the User. It has no substantial penalty on speedup. 
 [^bipartite]: The resulting production and consumption networks are necessarily bipartite since a species does not produce or consume directly to or from another species, and mediators do not produce and consume to or from other mediators. Edges only exist between mediators and species, two differently colored nodes. This is the definition of bipartite.
