@@ -1,6 +1,6 @@
 {
   "__comment__" : "Basic Parameters for a simulation",
-  "nSample" : 5,
+  "nSample" : 500,
   "nGen" : 200,
   "nInitialCell" : 1E4,
   "dilTh" : 1E10,

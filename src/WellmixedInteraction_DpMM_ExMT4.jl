@@ -80,7 +80,7 @@ function WellmixedInteraction_DpMM_ExMT4(
     stabilityVector = zeros(nCellType, nRound)
     compositionVector = nCellVector ./ sum(nCellVector)
     for iRound = 1:nRound
-        @info "Start Round: $iRound, nCellVector: $nCellVector"
+        # @info "Start Round: $iRound, nCellVector: $nCellVector"
         cMedVector = nInitialCell / sum(nCellVector) * cMedVector
         nCellVector = nInitialCell * cellRatioArray'
 
@@ -135,9 +135,9 @@ function WellmixedInteraction_DpMM_ExMT4(
             if iRound > 2
                 bc = BrayCurtisComposition(stabilityVector, iRound)
                 converged = bc < 1e-7
-                @info "Round: $iRound, time: $tau, BC: $bc"
+                # @info "Round: $iRound, time: $tau, BC: $bc"
                 if converged
-                    @info "!!! BC Conversion, breaking"
+                    # @info "!!! BC Conversion, breaking"
                     break
                 end
             end

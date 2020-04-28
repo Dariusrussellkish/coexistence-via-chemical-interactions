@@ -128,7 +128,7 @@ open(ARGS[1], "r") do io
     # filename generation
     stripChar = (s, r) -> replace(s, Regex("[$r]") => "")
     filename_uuid = stripChar(string(uuid4()), "-")
-    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_qp_$(qp)_qc_$(qc)_seed_$(rndseed0)_$(filename_uuid)"
+    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_qp_$(qp)_qc_$(qc)_multistability_seed_$(rndseed0)_$(filename_uuid)"
 
     # harness call
     CMPs = main(
