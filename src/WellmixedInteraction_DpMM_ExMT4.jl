@@ -1,4 +1,19 @@
 
+function BrayCurtisComposition(
+    c::Array{<:AbstractFloat,2},
+    iRound::T,
+) where {T<:Integer}
+    last = c[:, iRound-1]
+    curr = c[:, iRound]
+    # @info "Current: $curr"
+    # @info "Last: $last"
+    return 1 - sum(map(min, curr, last))
+end
+
+function BrayCurtisComposition(a::T, b::T) where {T<:Array{<:AbstractFloat,1}}
+    return 1 - sum(map(min, a, b))
+end
+
 function WellmixedInteraction_DpMM_ExMT4(
     nRound,
     r0Vector,
@@ -19,9 +34,6 @@ function WellmixedInteraction_DpMM_ExMT4(
     nCellType, nMediator = size(intMat)
 
     cMedVector = zeros(nMediator, 1)
-
-    tauScaleArray = collect(tau0:dtau:tauf)
-    nTauScale = length(tauScaleArray)
 
     nCellVector = nInitialCell * cellRatioArray'
     nCellVector0 = similar(nCellVector)
@@ -64,19 +76,19 @@ function WellmixedInteraction_DpMM_ExMT4(
 
     invNCellVecSum = 1.0 / sum(nCellVector)
 
+    converged = false
+    stabilityVector = zeros(nCellType, nRound)
+    compositionVector = nCellVector ./ sum(nCellVector)
     for iRound = 1:nRound
-        # @info "Start Round: $iRound, nCellVector: $nCellVector"
+        @info "Start Round: $iRound, nCellVector: $nCellVector"
         cMedVector = nInitialCell / sum(nCellVector) * cMedVector
         nCellVector = nInitialCell * cellRatioArray'
 
-        tau0 = 0
-        tau = tau0
-
+        tau = 0
         count = 1
-
-        while (tau <= tauf - dtau) && (sum(nCellVector) < DilTh)
-            tau = tauScaleArray[count]
-
+        initNCellVector = false
+        while ((tau < tauf) && (sum(nCellVector) < DilTh)) && !converged
+            tau += dtau
             rIntCMed1 .= cMedVector ./ kSatVector
             rIntCMed21 .= cMedVector + kSatVector
             rIntCMed2 .= cMedVector ./ rIntCMed21
@@ -86,7 +98,6 @@ function WellmixedInteraction_DpMM_ExMT4(
             rInt3 .= rInt1 .+ rInt2
             rInt4 .= r0Vector .+ rInt3
             rIntPerCellVector .= rInt4
-            # println("rInt: $(size(rIntPerCellVector))")
 
             nCellVectorPart1 .= rIntPerCellVector .* nCellVector
             nCellVectorPart2 .= dtau .* nCellVectorPart1
@@ -96,8 +107,9 @@ function WellmixedInteraction_DpMM_ExMT4(
             nCellVectorMask .= nCellVector .< ExtTh
             nCellVector[nCellVectorMask] .= 0
 
-            if count == 1
+            if !initNCellVector
                 nCellVector0 = deepcopy(nCellVector)
+                initNCelVector = true
             end
 
             Ce .= cMedVector * onesNCellType # nM * nC matrix, each column is cMed
@@ -119,10 +131,22 @@ function WellmixedInteraction_DpMM_ExMT4(
             cMedVector[cMedMask] .= 0
 
             count += 1
+            stabilityVector[:, iRound] = nCellVector ./ sum(nCellVector)
+            if iRound > 2
+                bc = BrayCurtisComposition(stabilityVector, iRound)
+                converged = bc < 1e-7
+                @info "Round: $iRound, time: $tau, BC: $bc"
+                if converged
+                    @info "!!! BC Conversion, breaking"
+                    break
+                end
+            end
         end
-
         invNCellVecSum = 1.0 / sum(nCellVector)
         cellRatioArray .= (*).(invNCellVecSum, nCellVector')
+        if converged
+            break
+        end
     end
     r = nCellVector ./ nCellVector0
     # @info "r: $r"
