@@ -17,6 +17,7 @@ using UUIDs
 @everywhere include("NetworkConfig_Binomial.jl")
 @everywhere include("WellmixedInteraction_DpMM_ExMT4.jl")
 
+
 # Main harness function
 function main(
     nSample,
@@ -36,6 +37,7 @@ function main(
     qp,
     qc,
     r,
+    cellRatioSamples
 )
     GenPerRound = log(dilTh / nInitialCell) / log(2)
     nRound = Integer(round(nGen / GenPerRound)) # number of rounds of propagation
@@ -43,53 +45,72 @@ function main(
     tau0 = 0 # in hours
     dirichlet = Dirichlet(ones(nCellType))
 
-    r0 = 0.08 .+ 0.04 .* rand(r[myid()], nCellType, 1) # population reproduction rates, per hour
-    kSatVector = kSatLevel * (0.5 .+ rand(r[myid()], nMediator, 1)) # population levels for influence saturation
+    r0T = SharedArray{Float64, 2}((nCellType, nSample), init=zeros(nCellType, nSample))
+    kSatVectorT = SharedArray{Float64, 2}((nMediator, nSample), init=zeros(nMediator, nSample))
+    RT = SharedArray{Float64, 3}((nCellType, nMediator, nSample), init=zeros(nCellType, nMediator, nSample))
+    PT = similar(RT)
+    AT = SharedArray{Float64, 3}((nMediator, nCellType, nSample), init=zeros(nMediator, nCellType, nSample))
+    BT = similar(AT)
+    rIntMatT = similar(RT)
+    CMPT = SharedArray{Float64, 3}((nCellType, cellRatioSamples, nSample), init=zeros(nCellType, cellRatioSamples, nSample))
 
-    ## Parameters
-    # Network configuration
-    # NetworkConfig_Balanced(Nc,Nm,q): link between Nc and Nm present with
-    # a probability q
-    R = NetworkConfig_Binomial(nCellType, nMediator, qc, r)
-    P = NetworkConfig_Binomial(nCellType, nMediator, qp, r)
-
-    # interaction matrix
-    alpha = at .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # consumption rates 0.5at to 1.5at
-    beta = bt .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # production rates 05.bt to 1.5bt
-    A = (R .* alpha)' # nc x nm function was defined as nm x nc
-    B = (P .* beta)' # ^
-
-    rIntMatA =
-        R .* DistInteractionStrengthMT_PB(nCellType, nMediator, ri0, posIntRatio, r) # matrix of interaction coefficients, 50/50
-
-    CMPs = SharedArray{Float64, 2}((nCellType, nSample), init=zeros(nCellType, nSample))
     @sync @distributed for ns = 1:nSample
+        r0 = 0.08 .+ 0.04 .* rand(r[myid()], nCellType, 1) # population reproduction rates, per hour
+        kSatVector = kSatLevel * (0.5 .+ rand(r[myid()], nMediator, 1)) # population levels for influence saturation
 
-        cellRatioArray = reshape(rand(r[myid()], dirichlet), (1, :)) # cell distribution population ratios
+        ## Parameters
+        # Network configuration
+        # NetworkConfig_Balanced(Nc,Nm,q): link between Nc and Nm present with
+        # a probability q
+        R = NetworkConfig_Binomial(nCellType, nMediator, qc, r)
+        P = NetworkConfig_Binomial(nCellType, nMediator, qp, r)
 
-        NeAD, CmpAD = WellmixedInteraction_DpMM_ExMT4(
-            nRound,
-            r0,
-            deepcopy(cellRatioArray),
-            rIntMatA,
-            nInitialCell,
-            kSatVector,
-            A,
-            B,
-            kSatLevel,
-            extTh,
-            dilTh,
-            tauf,
-            dtau,
-        )
+        # interaction matrix
+        alpha = at .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # consumption rates 0.5at to 1.5at
+        beta = bt .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # production rates 05.bt to 1.5bt
+        A = (R .* alpha)' # nc x nm function was defined as nm x nc
+        B = (P .* beta)' # ^
 
+        rIntMatA =
+            R .* DistInteractionStrengthMT_PB(nCellType, nMediator, ri0, posIntRatio, r) # matrix of interaction coefficients, 50/50
+
+        CMPs = zeros((nCellType, cellRatioSamples))
         Cmp0AD = zeros(1, nCellType)
-        Cmp0AD[NeAD] = CmpAD
-        CMPs[:, ns] = Cmp0AD
+        for crs = 1:cellRatioSamples
 
-        @info "pid: $(myid()) ns: $ns, Comp: $Cmp0AD"
+            cellRatioArray = reshape(rand(r[myid()], dirichlet), (1, :)) # cell distribution population ratios
+
+            NeAD, CmpAD = WellmixedInteraction_DpMM_ExMT4(
+                nRound,
+                r0,
+                deepcopy(cellRatioArray),
+                rIntMatA,
+                nInitialCell,
+                kSatVector,
+                A,
+                B,
+                kSatLevel,
+                extTh,
+                dilTh,
+                tauf,
+                dtau,
+            )
+            Cmp0AD = zeros(1, nCellType)
+            Cmp0AD[NeAD] = CmpAD
+            CMPs[:, crs] = Cmp0AD
+
+            # @info "pid: $(myid()) ns: $ns, Comp: $Cmp0AD"
+        end
+        CMPT[:, :, ns] = CMPs
+        r0T[:, ns] = r0
+        kSatVectorT[:, ns] = kSatVector
+        RT[:, :, ns] = R
+        PT[:,:, ns] = P
+        AT[:, :, ns] = A
+        BT[:, :, ns] = B
+        rIntMatT[:, :, ns] = rIntMatA
     end
-    return CMPs
+    return CMPT, r0T, kSatVectorT, RT, PT, AT, BT, rIntMatT
 end
 
 # Start of "script" portion
@@ -125,13 +146,15 @@ open(ARGS[1], "r") do io
     qp = params["qp"] # probability of production link per population
     qc = params["qc"] # probability of influence link per population
 
+    cellRatioSamples = params["cellRatioSamples"]
+
     # filename generation
     stripChar = (s, r) -> replace(s, Regex("[$r]") => "")
     filename_uuid = stripChar(string(uuid4()), "-")
     basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_qp_$(qp)_qc_$(qc)_multistability_seed_$(rndseed0)_$(filename_uuid)"
 
     # harness call
-    CMPs = main(
+    CMPTs, r0T, kSatVectorT, RT, PT, AT, BT, rIntMatT = main(
         nSample,
         nGen,
         nInitialCell,
@@ -149,13 +172,28 @@ open(ARGS[1], "r") do io
         qp,
         qc,
         r,
+        cellRatioSamples
     )
 
     # serialize
     save(
         "$(basename).jld",
-        "CMPs",
-        CMPs,
+        "CMPTs",
+        CMPTs,
+        "r0T",
+        r0T,
+        "kSatVectorT",
+        kSatVectorT,
+        "RT",
+        RT,
+        "PT",
+        PT,
+        "AT",
+        AT,
+        "BT",
+        BT,
+        "rIntMatT",
+        rIntMatT,
         "params",
         params,
     )
