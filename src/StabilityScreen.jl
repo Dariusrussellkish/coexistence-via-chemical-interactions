@@ -34,81 +34,87 @@ function main(
     dtau,
     at,
     bt,
-    qp,
-    qc,
     r,
-    cellRatioSamples
+    cellRatioSamples,
+    coarseness,
 )
     GenPerRound = log(dilTh / nInitialCell) / log(2)
     nRound = Integer(round(nGen / GenPerRound)) # number of rounds of propagation
 
-    tau0 = 0 # in hours
+    qpList = collect(0:coarseness:1)
+    qcList = collect(0:coarseness:1)
+
+    screenSize = length(qpList)
+
     dirichlet = Dirichlet(ones(nCellType))
 
-    r0T = SharedArray{Float64, 2}((nCellType, nSample), init=zeros(nCellType, nSample))
-    kSatVectorT = SharedArray{Float64, 2}((nMediator, nSample), init=zeros(nMediator, nSample))
-    RT = SharedArray{Float64, 3}((nCellType, nMediator, nSample), init=zeros(nCellType, nMediator, nSample))
+    r0T = SharedArray{Float64, 4}((screenSize, screenSize, nCellType, nSample), init=zeros(screenSize, screenSize, nCellType, nSample))
+    kSatVectorT = SharedArray{Float64, 4}((screenSize, screenSize, nMediator, nSample), init=zeros(screenSize, screenSize, nMediator, nSample))
+    RT = SharedArray{Float64, 5}((screenSize, screenSize, nCellType, nMediator, nSample), init=zeros(screenSize, screenSize, nCellType, nMediator, nSample))
     PT = similar(RT)
-    AT = SharedArray{Float64, 3}((nMediator, nCellType, nSample), init=zeros(nMediator, nCellType, nSample))
+    AT = SharedArray{Float64, 5}((screenSize, screenSize, nMediator, nCellType, nSample), init=zeros(screenSize, screenSize, nMediator, nCellType, nSample))
     BT = similar(AT)
     rIntMatT = similar(RT)
-    CMPT = SharedArray{Float64, 3}((nCellType, cellRatioSamples, nSample), init=zeros(nCellType, cellRatioSamples, nSample))
+    CMPT = SharedArray{Float64, 5}((screenSize, screenSize, nCellType, cellRatioSamples, nSample), init=zeros(screenSize, screenSize, nCellType, cellRatioSamples, nSample))
 
     @sync @distributed for ns = 1:nSample
-        r0 = 0.08 .+ 0.04 .* rand(r[myid()], nCellType, 1) # population reproduction rates, per hour
-        kSatVector = kSatLevel * (0.5 .+ rand(r[myid()], nMediator, 1)) # population levels for influence saturation
+        for (qpi, qp) in enumerate(qpList), (qci, qc) in enumerate(qcList)
+            r0 = 0.08 .+ 0.04 .* rand(r[myid()], nCellType, 1) # population reproduction rates, per hour
+            kSatVector = kSatLevel * (0.5 .+ rand(r[myid()], nMediator, 1)) # population levels for influence saturation
 
-        ## Parameters
-        # Network configuration
-        # NetworkConfig_Balanced(Nc,Nm,q): link between Nc and Nm present with
-        # a probability q
-        R = NetworkConfig_Binomial(nCellType, nMediator, qc, r)
-        P = NetworkConfig_Binomial(nCellType, nMediator, qp, r)
+            ## Parameters
+            # Network configuration
+            # NetworkConfig_Balanced(Nc,Nm,q): link between Nc and Nm present with
+            # a probability q
+            R = NetworkConfig_Binomial(nCellType, nMediator, qc, r)
+            P = NetworkConfig_Binomial(nCellType, nMediator, qp, r)
 
-        # interaction matrix
-        alpha = at .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # consumption rates 0.5at to 1.5at
-        beta = bt .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # production rates 05.bt to 1.5bt
-        A = (R .* alpha)' # nc x nm function was defined as nm x nc
-        B = (P .* beta)' # ^
+            # interaction matrix
+            alpha = at .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # consumption rates 0.5at to 1.5at
+            beta = bt .* (0.5 .+ rand(r[myid()], nCellType, nMediator)) # production rates 05.bt to 1.5bt
+            A = (R .* alpha)' # nc x nm function was defined as nm x nc
+            B = (P .* beta)' # ^
 
-        rIntMatA =
-            R .* DistInteractionStrengthMT_PB(nCellType, nMediator, ri0, posIntRatio, r) # matrix of interaction coefficients, 50/50
+            rIntMatA =
+                R .* DistInteractionStrengthMT_PB(nCellType, nMediator, ri0, posIntRatio, r) # matrix of interaction coefficients, 50/50
 
-        CMPs = zeros((nCellType, cellRatioSamples))
-        Cmp0AD = zeros(1, nCellType)
-        for crs = 1:cellRatioSamples
-
-            cellRatioArray = reshape(rand(r[myid()], dirichlet), (1, :)) # cell distribution population ratios
-
-            NeAD, CmpAD = WellmixedInteraction_DpMM_ExMT4(
-                nRound,
-                r0,
-                deepcopy(cellRatioArray),
-                rIntMatA,
-                nInitialCell,
-                kSatVector,
-                A,
-                B,
-                kSatLevel,
-                extTh,
-                dilTh,
-                tauf,
-                dtau,
-            )
+            CMPs = zeros((nCellType, cellRatioSamples))
             Cmp0AD = zeros(1, nCellType)
-            Cmp0AD[NeAD] = CmpAD
-            CMPs[:, crs] = Cmp0AD
+            for crs = 1:cellRatioSamples
 
-            # @info "pid: $(myid()) ns: $ns, Comp: $Cmp0AD"
+                cellRatioArray = reshape(rand(r[myid()], dirichlet), (1, :)) # cell distribution population ratios
+
+                NeAD, CmpAD = WellmixedInteraction_DpMM_ExMT4(
+                    nRound,
+                    r0,
+                    deepcopy(cellRatioArray),
+                    rIntMatA,
+                    nInitialCell,
+                    kSatVector,
+                    A,
+                    B,
+                    kSatLevel,
+                    extTh,
+                    dilTh,
+                    tauf,
+                    dtau,
+                )
+                Cmp0AD = zeros(1, nCellType)
+                Cmp0AD[NeAD] = CmpAD
+                CMPs[:, crs] = Cmp0AD
+
+                # @info "pid: $(myid()) ns: $ns, Comp: $Cmp0AD"
+            end
+            CMPT[qpi, qci, :, :, ns] = CMPs
+            r0T[qpi, qci, :, ns] = r0
+            kSatVectorT[qpi, qci, :, ns] = kSatVector
+            RT[qpi, qci, :, :, ns] = R
+            PT[qpi, qci, :,:, ns] = P
+            AT[qpi, qci, :, :, ns] = A
+            BT[qpi, qci, :, :, ns] = B
+            rIntMatT[qpi, qci, :, :, ns] = rIntMatA
         end
-        CMPT[:, :, ns] = CMPs
-        r0T[:, ns] = r0
-        kSatVectorT[:, ns] = kSatVector
-        RT[:, :, ns] = R
-        PT[:,:, ns] = P
-        AT[:, :, ns] = A
-        BT[:, :, ns] = B
-        rIntMatT[:, :, ns] = rIntMatA
+        @info "pid: $(myid()) done with sample $ns"
     end
     return CMPT, r0T, kSatVectorT, RT, PT, AT, BT, rIntMatT
 end
@@ -146,12 +152,13 @@ open(ARGS[1], "r") do io
     qp = params["qp"] # probability of production link per population
     qc = params["qc"] # probability of influence link per population
 
+    coarseness = params["coarseness"]
     cellRatioSamples = params["cellRatioSamples"]
 
     # filename generation
     stripChar = (s, r) -> replace(s, Regex("[$r]") => "")
     filename_uuid = stripChar(string(uuid4()), "-")
-    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_qp_$(qp)_qc_$(qc)_multistability_seed_$(rndseed0)_$(filename_uuid)"
+    basename = "nGen_$(nGen)_nCellType_$(nCellType)_nMediator_$(nMediator)_ri0_$(ri0)_posIntRatio_$(posIntRatio)_at_$(at)_bt_$(bt)_multistability_seed_$(rndseed0)_$(filename_uuid)"
 
     # harness call
     CMPTs, r0T, kSatVectorT, RT, PT, AT, BT, rIntMatT = main(
@@ -169,32 +176,33 @@ open(ARGS[1], "r") do io
         dtau,
         at,
         bt,
-        qp,
-        qc,
         r,
-        cellRatioSamples
+        cellRatioSamples,
+        coarseness,
     )
 
     # serialize
     save(
         "$(basename).jld",
         "CMPTs",
-        CMPTs,
+        Array(CMPTs),
         "r0T",
-        r0T,
+        Array(r0T),
         "kSatVectorT",
-        kSatVectorT,
+        Array(kSatVectorT),
         "RT",
-        RT,
+        Array(RT),
         "PT",
-        PT,
+        Array(PT),
         "AT",
-        AT,
+        Array(AT),
         "BT",
-        BT,
+        Array(BT),
         "rIntMatT",
-        rIntMatT,
+        Array(rIntMatT),
         "params",
         params,
+        "comment",
+        "[qp, qc, [data], ns]",
     )
 end
